@@ -1,0 +1,28 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+  standard:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: standard
+    level: INFO
+    stream: ext://sys.stdout
+  validation_file:
+    class: logging.FileHandler
+    formatter: standard
+    level: INFO
+    filename: logs/validation_history.log
+    encoding: utf-8
+loggers:
+  zero_tolerance:
+    handlers:
+      - console
+      - validation_file
+    level: INFO
+    propagate: false
+root:
+  handlers:
+    - console
+  level: INFO

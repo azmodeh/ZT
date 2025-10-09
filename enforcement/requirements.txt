@@ -1,0 +1,6 @@
+pyyaml
+httpx
+tqdm
+colorama
+radon
+orjson

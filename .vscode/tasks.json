@@ -1,0 +1,136 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "validate-project",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/validator.py"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "fix-violations",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/rewriter.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "generate-self-assessment",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/report_generator.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run-contract-check",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/ai_loop.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "start-mcp-server",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/contract-enforcer-mcp/server.py"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run-ai-reviewer",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/ai_reviewer.py",
+                "validate code"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "run-ai-agent",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "${workspaceFolder}/enforcement/ai_agent.py",
+                "remove print and add type hints"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}

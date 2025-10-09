@@ -1,0 +1,40 @@
+[
+  {
+    "key": "ctrl+alt+v",
+    "command": "workbench.action.tasks.runTask",
+    "args": "ZT: Validate Contract",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+r",
+    "command": "workbench.action.tasks.runTask",
+    "args": "ZT: Auto Rewrite",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+i",
+    "command": "workbench.action.tasks.runTask",
+    "args": "ZT: Build AI Index",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+a",
+    "command": "workbench.action.tasks.runTask",
+    "args": "ZT: Run AI Agent (Prompted)",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+q",
+    "command": "workbench.action.tasks.runTask",
+    "args": "ZT: Run Queue",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+alt+shift+t",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "python enforcement/validator.py\u000d"
+    },
+    "when": "terminalFocus"
+  }
+]

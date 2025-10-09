@@ -1,0 +1,10 @@
+{
+  "default": "meta-llama/llama-3.3-70b-instruct:free",
+  "fallbacks": [
+    "google/gemini-1.5-pro",
+    "openai/gpt-4o-mini"
+  ],
+  "embedding_model": "text-embedding-3-large",
+  "response_format": "json",
+  "temperature": 0.2
+}

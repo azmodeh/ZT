@@ -1,0 +1,16 @@
+tasks:
+  - id: remove_prints
+    description: "حذف print و جایگزینی با logger"
+    agent_prompt: "Remove every print() call; import logging if missing; route messages to logger.info; ensure Persian UI text stays Persian; return JSON patches only."
+  - id: add_type_hints
+    description: "افزودن Type Hint کامل"
+    agent_prompt: "Add full Python type hints for all functions and methods; avoid changing runtime behavior; return JSON patches only."
+  - id: enforce_pep8
+    description: "اصلاح فرمت و محدودیت ۷۹ کاراکتر"
+    agent_prompt: "Reformat files to respect 79 character lines, maintain absolute imports, and keep logging in English only; return JSON patches only."
+  - id: remove_hardcoded
+    description: "حذف مقادیر سخت‌کد"
+    agent_prompt: "Move hardcoded configuration values into YAML or environment lookups; keep code modular; return JSON patches only."
+  - id: final_validation
+    description: "اعتبارسنجی نهایی قرارداد"
+    action: "validate"

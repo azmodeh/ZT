@@ -1,0 +1,38 @@
+{
+    "mcp.servers.contract-enforcer": {
+        "command": "python",
+        "args": [
+            "${workspaceFolder}/contract-enforcer-mcp/server.py"
+        ],
+        "enabled": true
+    },
+    "python.defaultInterpreterPath": "./.venv/Scripts/python.exe",
+    "python.terminal.activateEnvironment": true,
+    "files.associations": {
+        "*.yml": "yaml",
+        "*.yaml": "yaml"
+    },
+    "yaml.schemas": {
+        "${workspaceFolder}/enforcement/contract_rules.yml": "contract_rules.yml"
+    },
+    "editor.formatOnSave": true,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length=79"
+    ],
+    "editor.rulers": [
+        79
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.shellArgs.windows": [
+        "-ExecutionPolicy",
+        "Bypass"
+    ],
+    "extensions.ignoreRecommendations": false,
+    "python.terminal.activateEnvInCurrentTerminal": true
+}

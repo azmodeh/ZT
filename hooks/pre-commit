@@ -1,0 +1,29 @@
+#!/bin/sh
+# Zero Tolerance Python Contract Enforcer Pre-Commit Hook
+
+echo "🔍 Running Zero Tolerance Contract Validation..."
+
+# Check if we're in a Python project
+if [ -f "enforcement/validator.py" ]; then
+    echo "✅ Found enforcement system, running validation..."
+    
+    # Run the validator
+    python enforcement/validator.py
+    
+    # Capture the exit code
+    VALIDATION_EXIT_CODE=$?
+    
+    if [ $VALIDATION_EXIT_CODE -ne 0 ]; then
+        echo "❌ Contract validation failed! Please fix violations before committing."
+        echo "💡 Run 'python enforcement/rewriter.py' to auto-fix common issues"
+        exit 1
+    else
+        echo "✅ Contract validation passed!"
+    fi
+else
+    echo "⚠️  No enforcement system found in current directory, skipping validation"
+fi
+
+# Run any additional pre-commit checks
+echo "✅ Pre-commit checks completed successfully"
+exit 0
