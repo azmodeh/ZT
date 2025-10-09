@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  zt-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zero-tolerance-mcp
+    restart: unless-stopped
+    environment:
+      - ZT_DOCKER_MODE=1
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount data directory for persistence (optional)
+      - ./data:/app/data
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
