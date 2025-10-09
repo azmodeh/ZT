@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "zero-tolerance": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "zt-zt-mcp-server:latest"
+      ]
+    }
+  }
+}
