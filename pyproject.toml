@@ -17,3 +17,11 @@ dependencies = [
     "radon>=5.1.0",
     "watchdog>=3.0.0",
 ]
+
+[tool.setuptools]
+py-modules = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["enforcement*", "app*"]
+exclude = ["zt*", "logs*", "data*", "hooks*", "project*", "tests*"]
