@@ -1,0 +1,981 @@
+{
+  "files_scanned": 20,
+  "rules_evaluated": 9,
+  "violations_total": 78,
+  "compliance_score": 56.67,
+  "violations": [
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+      "line": 126
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 100 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+      "line": 183
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 86 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+      "line": 208
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 210
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 88 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 223
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 85 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 256
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 82 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 257
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 200
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 93
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+      "line": 62
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_set_admin_group_cmd' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 308
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_get_admin_group_cmd' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 313
+    },
+    {
+      "rule": "max_file_lines",
+      "message": "File exceeds 300 lines.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 301
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 72
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 73
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 74
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 92 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 205
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 82 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 213
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 95 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 218
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 81 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+      "line": 240
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 92 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 15
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 55
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 93 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 73
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 96 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 114
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 127
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 94 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 149
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 81 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 163
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 91 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 167
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 87 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+      "line": 176
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'main' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+      "line": 202
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+      "line": 11
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 81 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+      "line": 42
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+      "line": 76
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+      "line": 79
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'on_modified' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+      "line": 24
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'add_reload_callback' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+      "line": 60
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'on_modified' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+      "line": 72
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'main' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\session_string.py",
+      "line": 61
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 86 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\session_string.py",
+      "line": 24
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'fetch_one' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+      "line": 122
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'fetch_all' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+      "line": 128
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'execute' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+      "line": 134
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'log_event' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\logging.py",
+      "line": 64
+    },
+    {
+      "rule": "max_file_lines",
+      "message": "File exceeds 300 lines.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\qdrant_client.py",
+      "line": 301
+    },
+    {
+      "rule": "no_hardcoded_values",
+      "message": "Suspicious hardcoded string literal detected.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\qdrant_client.py",
+      "line": 30
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 85 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\features\\onboarding\\group_approval.py",
+      "line": 46
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_filter_failure' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\command_router.py",
+      "line": 182
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 84 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\command_router.py",
+      "line": 153
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 91 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+      "line": 51
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 85 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+      "line": 124
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+      "line": 189
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 84 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+      "line": 205
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 84 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+      "line": 209
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_start_command' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 41
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_help_command' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 76
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_message' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 117
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_route_command' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 184
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_check_ai_triggers' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 203
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_is_reply_to_bot' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 234
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_settings_command' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 243
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_callback' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 273
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_admin_groups_callback' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 301
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function '_handle_game_callback' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 307
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_start' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 26
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_help' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 30
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_all_messages' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 34
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_callbacks' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 38
+    },
+    {
+      "rule": "max_file_lines",
+      "message": "File exceeds 300 lines.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 301
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 80 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 130
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 82 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 256
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 257
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 84 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 258
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 87 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 332
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 83 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+      "line": 344
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_own_messages' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+      "line": 45
+    },
+    {
+      "rule": "type_hints_required",
+      "message": "Function 'handle_incoming_messages' is missing full type hints.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+      "line": 49
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 81 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+      "line": 77
+    },
+    {
+      "rule": "max_line_length",
+      "message": "Line length 87 exceeds limit 79.",
+      "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+      "line": 150
+    }
+  ],
+  "violations_by_file": {
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\main.py": [],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\admin_groups\\admin_guard.py": [],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\admin_groups\\admin_router.py": [],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py": [
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+        "line": 126
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 100 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+        "line": 183
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 86 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\chat_ai.py",
+        "line": 208
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py": [
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 210
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 88 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 223
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 85 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 256
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 82 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 257
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 200
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 93
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\ai\\multi_ai.py",
+        "line": 62
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_set_admin_group_cmd' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 308
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_get_admin_group_cmd' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 313
+      },
+      {
+        "rule": "max_file_lines",
+        "message": "File exceeds 300 lines.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 301
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 72
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 73
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 74
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 92 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 205
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 82 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 213
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 95 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 218
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 81 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\admin_groups_cmd.py",
+        "line": 240
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py": [
+      {
+        "rule": "max_line_length",
+        "message": "Line length 92 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 15
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 55
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 93 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 73
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 96 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 114
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 127
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 94 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 149
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 81 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 163
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 91 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 167
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 87 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\commands\\core_commands.py",
+        "line": 176
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'main' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+        "line": 202
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+        "line": 11
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 81 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+        "line": 42
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+        "line": 76
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\bootstrap.py",
+        "line": 79
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'on_modified' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+        "line": 24
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'add_reload_callback' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+        "line": 60
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'on_modified' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\hot_reload.py",
+        "line": 72
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\session_string.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'main' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\session_string.py",
+        "line": 61
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 86 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\session_string.py",
+        "line": 24
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'fetch_one' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+        "line": 122
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'fetch_all' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+        "line": 128
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'execute' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\db.py",
+        "line": 134
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\logging.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'log_event' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\infra\\logging.py",
+        "line": 64
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\embedding_service.py": [],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\qdrant_client.py": [
+      {
+        "rule": "max_file_lines",
+        "message": "File exceeds 300 lines.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\qdrant_client.py",
+        "line": 301
+      },
+      {
+        "rule": "no_hardcoded_values",
+        "message": "Suspicious hardcoded string literal detected.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\qdrant_client.py",
+        "line": 30
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\memory\\schemas.py": [],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\features\\onboarding\\group_approval.py": [
+      {
+        "rule": "max_line_length",
+        "message": "Line length 85 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\features\\onboarding\\group_approval.py",
+        "line": 46
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\command_router.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_filter_failure' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\command_router.py",
+        "line": 182
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 84 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\command_router.py",
+        "line": 153
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py": [
+      {
+        "rule": "max_line_length",
+        "message": "Line length 91 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+        "line": 51
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 85 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+        "line": 124
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+        "line": 189
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 84 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+        "line": 205
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 84 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\core\\filters\\message_filter.py",
+        "line": 209
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_start_command' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 41
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_help_command' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 76
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_message' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 117
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_route_command' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 184
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_check_ai_triggers' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 203
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_is_reply_to_bot' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 234
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_settings_command' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 243
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_callback' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 273
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_admin_groups_callback' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 301
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function '_handle_game_callback' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 307
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_start' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 26
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_help' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 30
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_all_messages' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 34
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_callbacks' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 38
+      },
+      {
+        "rule": "max_file_lines",
+        "message": "File exceeds 300 lines.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 301
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 80 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 130
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 82 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 256
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 257
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 84 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 258
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 87 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 332
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 83 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\normalbot\\bot.py",
+        "line": 344
+      }
+    ],
+    "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py": [
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_own_messages' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+        "line": 45
+      },
+      {
+        "rule": "type_hints_required",
+        "message": "Function 'handle_incoming_messages' is missing full type hints.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+        "line": 49
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 81 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+        "line": 77
+      },
+      {
+        "rule": "max_line_length",
+        "message": "Line length 87 exceeds limit 79.",
+        "file": "d:\\Workdir\\Manager\\ArisenManager\\app\\bots\\userbot\\client.py",
+        "line": 150
+      }
+    ]
+  }
+}

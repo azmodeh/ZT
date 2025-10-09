@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import ast
 import sys
-from dataclasses import dataclass, field
+# Removed dataclass imports for Python 3.13 compatibility
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -22,12 +22,12 @@ COMPLEXITY_WARNING_EMITTED = False
 LOGGER = get_logger("zero_tolerance.validator")
 
 
-@dataclass
 class RuleViolation:
-    rule: str
-    message: str
-    file_path: Path
-    line: Optional[int] = None
+    def __init__(self, rule: str, message: str, file_path: Path, line: Optional[int] = None):
+        self.rule = rule
+        self.message = message
+        self.file_path = file_path
+        self.line = line
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -38,20 +38,20 @@ class RuleViolation:
         }
 
 
-@dataclass
 class FileValidationResult:
-    path: Path
-    violations: List[RuleViolation] = field(default_factory=list)
+    def __init__(self, path: Path, violations: Optional[List[RuleViolation]] = None):
+        self.path = path
+        self.violations = violations or []
 
     def add(self, violation: RuleViolation) -> None:
         self.violations.append(violation)
 
 
-@dataclass
 class ValidationReport:
-    files: List[FileValidationResult]
-    rules_count: int
-    violations: List[RuleViolation]
+    def __init__(self, files: List[FileValidationResult], rules_count: int, violations: List[RuleViolation]):
+        self.files = files
+        self.rules_count = rules_count
+        self.violations = violations
 
     @property
     def files_scanned(self) -> int:

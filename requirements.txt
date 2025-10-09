@@ -1,0 +1,4 @@
+# Zero Tolerance System Dependencies
+httpx
+orjson
+pyyaml

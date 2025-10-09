@@ -32,7 +32,7 @@ class ContractValidationHandler(FileSystemEventHandler):
         if event.is_directory:
             return
             
-        file_path = Path(event.src_path)
+        file_path = Path(str(event.src_path))
         
         # Only validate Python files
         if file_path.suffix.lower() == '.py':
@@ -44,7 +44,7 @@ class ContractValidationHandler(FileSystemEventHandler):
         if event.is_directory:
             return
             
-        file_path = Path(event.src_path)
+        file_path = Path(str(event.src_path))
         
         # Only validate Python files
         if file_path.suffix.lower() == '.py':

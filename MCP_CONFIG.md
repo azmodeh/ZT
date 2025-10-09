@@ -15,7 +15,7 @@ Complete configuration guide for integrating the Zero Tolerance Python Contract 
 ### Method 1: Direct Configuration in settings.json
 ```json
 {
-  "mcp.servers": {
+  "mcpServers": {
     "zero-tolerance-contract-enforcer": {
       "command": "python",
       "args": [
@@ -34,8 +34,7 @@ Complete configuration guide for integrating the Zero Tolerance Python Contract 
 ```json
 {
   "contributes": {
-    "mcp": {
-      "servers": {
+    "mcpServers": {
         "zero-tolerance-contract-enforcer": {
           "command": "python",
           "args": [
@@ -51,13 +50,12 @@ Complete configuration guide for integrating the Zero Tolerance Python Contract 
       }
     }
   }
-}
 ```
 
 ### Method 3: Workspace-specific configuration (.vscode/settings.json)
 ```json
 {
-  "mcp.servers": {
+  "mcpServers": {
     "zero-tolerance-contract-enforcer": {
       "command": "python",
       "args": [

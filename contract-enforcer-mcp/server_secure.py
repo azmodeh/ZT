@@ -13,6 +13,7 @@ from functools import lru_cache
 import time
 from collections import defaultdict
 import importlib.util
+import os
 
 from fastmcp import FastMCP
 
@@ -24,7 +25,7 @@ ENFORCEMENT_MODULE_PATH = ZT_ROOT / "enforcement"
 
 # Validate ZT root is safe
 if not ZT_ROOT.name == "ZT" or not ENFORCEMENT_MODULE_PATH.exists():
-    raise Exception("ZT project structure validation failed")
+    raise SecurityError("ZT project structure validation failed")
 
 mcp = FastMCP("ZT")
 
@@ -103,7 +104,6 @@ def validate_base_path(base_path: str) -> bool:
             return False
         
         # SECURE: Validate path is not in system directories
-        import os
         system_dirs = {'/etc', '/usr', '/bin', '/sbin', '/root', 'C:\\Windows', 'C:\\Program Files'}
         if any(str(abs_path).startswith(sys_dir) for sys_dir in system_dirs):
             logger.warning(f"System directory access denied: {base_path}")
@@ -164,24 +164,24 @@ def get_config_hash() -> str:
 def load_contract_rules() -> Dict[str, Any]:
     """SECURE: Load contract rules from YAML configuration"""
     try:
-        import yaml
+        # SECURE: Use secure module import instead of sys.path manipulation
+        utils_module = secure_import_module(
+            ENFORCEMENT_MODULE_PATH / "utils.py", 
+            "enforcement.utils"
+        )
+        load_rules_func = utils_module.load_contract_rules
         
-        # SECURE: Use hardcoded absolute path
+        # SECURE: Use context manager instead of os.chdir
         config_path = ENFORCEMENT_MODULE_PATH / "contract_rules.yml"
         if not config_path.exists():
             raise FileNotFoundError(f"Contract rules not found: {config_path}")
         
-        # Load rules directly without using utils module
-        with open(config_path, "r", encoding="utf-8") as stream:
-            rules = yaml.safe_load(stream) or {}
-        
-        logger.info(f"Contract rules loaded successfully from {config_path}")
-        return rules
+        # Load rules with current working directory preserved
+        return load_rules_func()
         
     except Exception as e:
         logger.error(f"Failed to load contract rules: {e}")
         raise SecurityError(f"Contract rules loading failed: {e}")
-
 
 @lru_cache(maxsize=10)
 def _cached_validation(base_path: str, config_hash: str) -> Dict[str, Any]:
@@ -235,7 +235,6 @@ def run_validation(base_path: str) -> Dict[str, Any]:
     """Run contract validation over codebase with security checks."""
     config_hash = get_config_hash()
     return _cached_validation(base_path, config_hash)
-
 
 def run_fixer(base_path: str) -> Dict[str, Any]:
     """Run auto-fixer on codebase with security checks."""
@@ -293,74 +292,7 @@ def run_fixer(base_path: str) -> Dict[str, Any]:
         logger.error(f"Fixer error: {e}")
         raise
 
-
-def generate_self_assessment_report(base_path: str) -> Dict[str, Any]:
-    """SECURE: Generate self-assessment report"""
-    try:
-        # SECURE: Use secure module import
-        report_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "report_generator.py",
-            "enforcement.report_generator"
-        )
-        store_report = report_module.store_report
-
-        report = run_validation(base_path)
-        assessment = {
-            "total_files": report.get("files_scanned", 0),
-            "total_rules": report.get("rules_evaluated", 0),
-            "total_violations": report.get("violations_total", 0),
-            "compliance_score": report.get("compliance_score", 0),
-            "violations_by_file": report.get("violations_by_file", {}),
-            "status": "PASS" if report.get("violations_total", 0) == 0 else "FAIL",
-        }
-        
-        # SECURE: Store report without changing working directory
-        store_report(assessment)
-            
-        return assessment
-    except Exception as e:
-        logger.error(f"Assessment report error: {e}")
-        raise
-
-
-def get_latest_validation_report() -> Dict[str, Any]:
-    """SECURE: Get the latest validation report from logs."""
-    try:
-        # SECURE: Use secure module import
-        report_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "report_generator.py",
-            "enforcement.report_generator"
-        )
-        load_latest_report = report_module.load_latest_report
-
-        # SECURE: Load report without changing working directory
-        report = load_latest_report()
-        return report if report is not None else {}
-    except Exception as e:
-        logger.error(f"Error loading latest report: {e}")
-        return {}
-
-
-def get_validation_history() -> List[Dict[str, Any]]:
-    """SECURE: Get validation history from logs."""
-    import json
-
-    # SECURE: Use hardcoded trusted path
-    logs_dir = ZT_ROOT / "logs"
-    history = []
-
-    if logs_dir.exists():
-        for log_file in logs_dir.glob("validation_*.json"):
-            try:
-                with open(log_file, "r", encoding="utf-8") as f:
-                    report = json.load(f)
-                    history.append(report)
-            except Exception:
-                continue
-
-    return sorted(history, key=lambda x: x.get("timestamp", ""), reverse=True)
-
-
+# MCP Tools with enhanced security
 @mcp.tool
 def validate_code(base_path: str) -> dict:
     """Validate Python codebase against Zero Tolerance contract rules"""
@@ -388,19 +320,6 @@ def fix_violations(base_path: str) -> dict:
         return {"error": str(e)}
 
 @mcp.tool
-def generate_self_assessment(base_path: str) -> dict:
-    """Generate self-assessment report for contract compliance"""
-    try:
-        # Rate limiting check
-        if not check_rate_limit():
-            return {"error": "Rate limit exceeded. Please wait before making another request."}
-        
-        return generate_self_assessment_report(base_path)
-    except Exception as e:
-        logger.error(f"Assessment error: {e}")
-        return {"error": str(e)}
-
-@mcp.tool
 def check_compliance(base_path: str) -> dict:
     """Check overall compliance status of a codebase"""
     try:
@@ -421,54 +340,6 @@ def check_compliance(base_path: str) -> dict:
     except Exception as e:
         logger.error(f"Compliance check error: {e}")
         return {"error": str(e)}
-
-
-# MCP Resources
-@mcp.resource("validation://latest-report")
-def get_latest_report() -> dict:
-    """Get the latest validation report."""
-    return get_latest_validation_report()
-
-@mcp.resource("validation://history") 
-def get_validation_history_resource() -> list:
-    """Get validation history."""
-    return get_validation_history()
-
-@mcp.resource("validation://compliance-status")
-def get_compliance_status() -> dict:
-    """SECURE: Get current compliance status."""
-    try:
-        # SECURE: Use secure module imports
-        validator_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "validator.py",
-            "enforcement.validator"
-        )
-        utils_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "utils.py",
-            "enforcement.utils"
-        )
-        
-        Validator = validator_module.Validator
-        ProjectPaths = utils_module.ProjectPaths
-        
-        rules = load_contract_rules()
-        paths = ProjectPaths(
-            Path("."),
-            rules.get("include_globs", []),
-            rules.get("exclude_globs", []),
-        )
-        validator = Validator(rules, paths)
-        report = validator.run()
-        return {
-            "status": "PASS" if report.total_violations == 0 else "FAIL",
-            "compliance_score": report.compliance_score(),
-            "total_violations": report.total_violations,
-            "files_scanned": report.files_scanned,
-        }
-    except Exception as e:
-        logger.error(f"Error generating compliance status: {e}")
-        return {"error": f"Failed to generate compliance status: {str(e)}"}
-
 
 if __name__ == "__main__":
     mcp.run()

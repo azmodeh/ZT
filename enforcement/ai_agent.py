@@ -184,7 +184,7 @@ def run_validator() -> None:
         LOGGER.info("Validator executed successfully after patch application.")
 
 
-def main() -> None:
+async def main() -> None:
     args = parse_arguments()
     rules = load_contract_rules()
     model_config = load_ai_model_config()
@@ -225,4 +225,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

@@ -10,3 +10,12 @@
 2025-10-09 21:35:04,036 - zero_tolerance.report - INFO - Stored report at logs\validation_20251009_173504.json
 2025-10-09 21:53:32,594 - zero_tolerance.validator - INFO - Validation completed with no contract violations.
 2025-10-09 21:53:32,595 - zero_tolerance.report - INFO - Stored report at logs\validation_20251009_175332.json
+2025-10-10 00:36:54,147 - zero_tolerance.validator - WARNING - Validation found 78 violations across 20 files.
+2025-10-10 00:37:10,874 - zero_tolerance.validator - WARNING - Validation found 78 violations across 20 files.
+2025-10-10 00:37:32,930 - zero_tolerance.validator - WARNING - Validation found 78 violations across 20 files.
+2025-10-10 01:02:26,446 - zero_tolerance.validator - WARNING - Validation found 105 violations across 19 files.
+2025-10-10 01:02:26,539 - zero_tolerance.validator - WARNING - Validation found 104 violations across 26 files.
+2025-10-10 01:02:26,542 - zero_tolerance.report - INFO - Stored report at logs\validation_20251009_210226.json
+2025-10-10 01:04:33,307 - zero_tolerance.validator - WARNING - Validation found 105 violations across 19 files.
+2025-10-10 01:04:33,666 - zero_tolerance.validator - WARNING - Validation found 104 violations across 26 files.
+2025-10-10 01:04:33,667 - zero_tolerance.report - INFO - Stored report at logs\validation_20251009_210433.json

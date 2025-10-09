@@ -12,6 +12,12 @@ modular_architecture: true
 min_score: 90
 auto_fix: true
 max_passes: 3
+
+# AI Configuration
+ai_config:
+  api_key: "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"
+  base_url: "https://openrouter.ai/api/v1"
+  model: "meta-llama/llama-3.3-70b-instruct:free"
 target_root: "../app"
 include_globs:
   - "**/*.py"
