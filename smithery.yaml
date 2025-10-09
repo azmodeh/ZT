@@ -4,6 +4,9 @@ version: "1.0.0"
 description: "Zero Tolerance Python Contract Enforcer with MCP Server"
 runtime: python
 
+# Use custom Dockerfile
+dockerfile: Dockerfile
+
 # Command to start the MCP server
 startCommand:
   type: stdio
@@ -12,6 +15,7 @@ startCommand:
     - main.py
   env:
     PYTHONPATH: "."
+    ZT_DOCKER_MODE: "1"
 
 # Metadata
 author: "ZT Development Team"
