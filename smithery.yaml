@@ -1,0 +1,137 @@
+# Smithery.ai Configuration for Zero Tolerance (ZT) System
+# https://smithery.ai/docs/build/project-config
+
+name: zero-tolerance-system
+version: "1.0.0"
+description: "Zero Tolerance Python Contract Enforcer with MCP Server"
+
+# Project metadata
+project:
+  type: python
+  language: python
+  framework: fastapi
+  runtime: python3.13
+
+# Build configuration
+build:
+  # Python build settings
+  python:
+    version: "3.13"
+    requirements: "requirements.txt"
+    entry_point: "contract-enforcer-mcp/server.py"
+    
+  # Environment variables
+  environment:
+    PYTHONPATH: "."
+    ZT_ENV: "production"
+    
+  # Build steps
+  steps:
+    - name: "Install Dependencies"
+      command: "pip install -r requirements.txt"
+      
+    - name: "Validate Configuration"
+      command: "python -c 'from enforcement.utils import load_contract_rules; print(\"Config OK\")'"
+      
+    - name: "Run Tests"
+      command: "python test_zt_tools.py"
+      optional: true
+
+# Deployment configuration
+deploy:
+  # Service configuration
+  services:
+    - name: "zt-mcp-server"
+      type: "mcp-server"
+      port: 8080
+      command: "python contract-enforcer-mcp/server.py"
+      environment:
+        PYTHONPATH: "."
+      
+  # Health check
+  health_check:
+    path: "/health"
+    interval: 30
+    timeout: 10
+
+# Dependencies
+dependencies:
+  - fastmcp>=0.9.0
+  - pyyaml>=6.0
+  - openai>=1.0.0
+  - requests>=2.28.0
+  - colorama>=0.4.0
+  - tqdm>=4.64.0
+  - radon>=5.1.0
+  - watchdog>=3.0.0
+
+# File patterns
+include:
+  - "*.py"
+  - "*.yml"
+  - "*.yaml"
+  - "*.json"
+  - "*.txt"
+  - "*.md"
+  - "requirements.txt"
+  - "contract-enforcer-mcp/**"
+  - "enforcement/**"
+  - "data/**"
+
+exclude:
+  - "__pycache__/**"
+  - "*.pyc"
+  - ".git/**"
+  - ".vscode/**"
+  - "logs/**"
+  - "venv/**"
+  - ".venv/**"
+  - "*.bak"
+  - "test_*.py"
+  - "debug_*.py"
+
+# Validation rules
+validation:
+  # Code quality checks
+  quality:
+    max_file_lines: 300
+    max_line_length: 79
+    no_print_statements: true
+    type_hints_required: true
+    
+  # Security checks
+  security:
+    no_hardcoded_secrets: true
+    secure_imports_only: true
+    
+# Documentation
+docs:
+  readme: "README.md"
+  api_docs: true
+  generate_docs: true
+
+# Monitoring
+monitoring:
+  metrics: true
+  logging: true
+  error_tracking: true
+
+# Metadata
+metadata:
+  author: "ZT Development Team"
+  license: "MIT"
+  repository: "https://github.com/your-org/zero-tolerance-system"
+  homepage: "https://your-domain.com/zt"
+  
+  tags:
+    - "python"
+    - "mcp-server"
+    - "code-quality"
+    - "zero-tolerance"
+    - "contract-enforcer"
+    - "validation"
+    
+  categories:
+    - "development-tools"
+    - "code-analysis"
+    - "quality-assurance"
