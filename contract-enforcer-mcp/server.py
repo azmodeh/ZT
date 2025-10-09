@@ -22,9 +22,13 @@ logger = logging.getLogger(__name__)
 ZT_ROOT = Path(__file__).parent.parent.resolve()
 ENFORCEMENT_MODULE_PATH = ZT_ROOT / "enforcement"
 
-# Validate ZT root is safe
-if not ZT_ROOT.name == "ZT" or not ENFORCEMENT_MODULE_PATH.exists():
-    raise Exception("ZT project structure validation failed")
+# Validate ZT root is safe (skip in Docker mode)
+import os
+if os.environ.get('ZT_DOCKER_MODE') != '1':
+    if not ZT_ROOT.name == "ZT" or not ENFORCEMENT_MODULE_PATH.exists():
+        raise Exception("ZT project structure validation failed")
+elif not ENFORCEMENT_MODULE_PATH.exists():
+    raise Exception(f"Enforcement module not found at: {ENFORCEMENT_MODULE_PATH}")
 
 mcp = FastMCP("ZT")
 
