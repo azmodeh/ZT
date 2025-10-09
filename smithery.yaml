@@ -14,7 +14,9 @@ project:
 
 # Command to start the application
 startCommand:
-  production: "python contract-enforcer-mcp/server.py"
+  type: http
+  command: "python contract-enforcer-mcp/server.py"
+  port: 8080
 
 # Build configuration
 build:
