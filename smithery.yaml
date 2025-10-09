@@ -10,7 +10,11 @@ project:
   type: python
   language: python
   framework: fastapi
-  runtime: python3.13
+  runtime: python
+
+# Command to start the application
+startCommand:
+  production: "python contract-enforcer-mcp/server.py"
 
 # Build configuration
 build:
