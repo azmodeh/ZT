@@ -8,7 +8,8 @@ import ast
 import re
 
 
-def validate_line_length(content: str, max_length: int = 79) -> List[Dict[str, Any]]:
+def validate_line_length(content: str, max_length: int = 79) -> \
+List[Dict[str, Any]]:
     """Validate line length compliance.
     
     Args:
@@ -46,7 +47,7 @@ def extract_hardcoded_values(content: str) -> List[Dict[str, Any]]:
     hardcoded_values = []
     
     class HardcodedValueVisitor(ast.NodeVisitor):
-        def visit_Str(self, node):
+        def visit_Str(self, node: ast.Str) -> None:
             if len(node.s) > 0:  # Non-empty strings
                 hardcoded_values.append({
                     'type': 'string',
@@ -56,7 +57,7 @@ def extract_hardcoded_values(content: str) -> List[Dict[str, Any]]:
                 })
             self.generic_visit(node)
         
-        def visit_Num(self, node):
+        def visit_Num(self, node: ast.Num) -> None:
             # Exclude common numeric literals that are usually OK
             if not isinstance(node.n, (int, float)) or abs(node.n) > 1:
                 hardcoded_values.append({
@@ -67,7 +68,7 @@ def extract_hardcoded_values(content: str) -> List[Dict[str, Any]]:
                 })
             self.generic_visit(node)
         
-        def visit_Constant(self, node):
+        def visit_Constant(self, node: ast.Constant) -> None:
             # Handle different constant types safely
             if isinstance(node.value, (str, int, float)):
                 if node.value != 0 and node.value != 1 and node.value != '':
@@ -98,7 +99,7 @@ def find_print_statements(content: str) -> List[Dict[str, Any]]:
     print_calls = []
     
     class PrintCallVisitor(ast.NodeVisitor):
-        def visit_Call(self, node):
+        def visit_Call(self, node: ast.Call) -> None:
             if (isinstance(node.func, ast.Name) and 
                 node.func.id == 'print'):
                 print_calls.append({
@@ -127,7 +128,7 @@ def validate_imports(content: str) -> List[Dict[str, Any]]:
     violations = []
     
     class ImportVisitor(ast.NodeVisitor):
-        def visit_ImportFrom(self, node):
+        def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
             if node.module and node.module.startswith('.'):
                 violations.append({
                     'line': node.lineno,
@@ -156,7 +157,7 @@ def validate_type_hints(content: str) -> List[Dict[str, Any]]:
     violations = []
     
     class TypeHintVisitor(ast.NodeVisitor):
-        def visit_FunctionDef(self, node):
+        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
             # Check if function has return type annotation
             has_return_type = node.returns is not None
             
@@ -168,7 +169,8 @@ def validate_type_hints(content: str) -> List[Dict[str, Any]]:
                         missing_hints.append(arg.arg)
             
             # Check if function has type hints
-            has_param_hints = len(missing_hints) < len([a for a in node.args.args if a.arg not in ['self', 'cls']])
+            has_param_hints = len(missing_hints) < len([a for a in \
+            node.args.args if a.arg not in ['self', 'cls']])
             
             if not (has_return_type or has_param_hints):
                 violations.append({
@@ -180,7 +182,7 @@ def validate_type_hints(content: str) -> List[Dict[str, Any]]:
             
             self.generic_visit(node)
         
-        def visit_AsyncFunctionDef(self, node):
+        def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
             # Check if async function has return type annotation
             has_return_type = node.returns is not None
             
@@ -192,7 +194,8 @@ def validate_type_hints(content: str) -> List[Dict[str, Any]]:
                         missing_hints.append(arg.arg)
             
             # Check if function has type hints
-            has_param_hints = len(missing_hints) < len([a for a in node.args.args if a.arg not in ['self', 'cls']])
+            has_param_hints = len(missing_hints) < len([a for a in \
+            node.args.args if a.arg not in ['self', 'cls']])
             
             if not (has_return_type or has_param_hints):
                 violations.append({
@@ -285,7 +288,8 @@ def safe_read_file(file_path: Path, encoding: str = 'utf-8') -> Optional[str]:
         return None
 
 
-def safe_write_file(file_path: Path, content: str, encoding: str = 'utf-8') -> bool:
+def safe_write_file(file_path: Path, content: str, encoding: str = 'utf-8') \
+-> bool:
     """Safely write file content.
     
     Args:

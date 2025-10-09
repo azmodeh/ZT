@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 from app.core.policy_manager import PolicyManager
 from app.classes.violation_detector import ViolationDetector
 from app.classes.enforcement_actions import EnforcementActions
@@ -19,14 +21,14 @@ class ContractEnforcer:
         self.report_generator = ReportGenerator()
 
 
-def run(self):
+def run(self) -> None:
     config = self.config_loader.load_config()
     logger.info("Starting contract enforcement")
 
     # Example code to test
     code = """
     def example_function():
-        print("This is an example function")
+        logger.info("This is an example function")
     """
 
     # Detect violations
@@ -34,7 +36,8 @@ def run(self):
 
     # Handle large codebases efficiently
     if len(violations) > 100:
-        logger.warning("Large number of violations detected: %d", len(violations))
+        logger.warning("Large number of violations detected: %d", \
+        len(violations))
 
     # Execute enforcement actions
     for violation in violations.values():
@@ -47,7 +50,7 @@ def run(self):
     # Run AI agent
     asyncio.run(self.run_ai_agent())
 
-async def run_ai_agent(self):
+async def run_ai_agent(self) -> None:
     try:
         await ai_agent_main()
     except Exception as e:

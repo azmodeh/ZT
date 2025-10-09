@@ -21,11 +21,11 @@ class PolicyManager:
     def get_policy(self, policy_name: str) -> Dict[str, Any]:
         return self.policies.get(policy_name, {})
 
-    def add_policy(self, policy_name: str, policy: Dict[str, Any]):
+    def add_policy(self, policy_name: str, policy: Dict[str, Any]) -> None:
         self.policies[policy_name] = policy
         self.save_policies()
 
-    def save_policies(self):
+    def save_policies(self) -> None:
         try:
             with open(self.config_path, 'w') as file:
                 yaml.safe_dump(self.policies, file)

@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 """Zero Tolerance Python Contract Enforcer
 Code Filters and Transformers
 """
@@ -43,7 +45,8 @@ class LineLengthFilter(CodeFilter):
         Args:
             max_length: Maximum line length allowed
         """
-        super().__init__("line_length_filter", "Wrap lines exceeding maximum length")
+        super().__init__("line_length_filter", "Wrap lines exceeding maximum \
+        length")
         self.max_length = max_length
     
     def apply(self, content: str, file_path: Path) -> str:
@@ -154,7 +157,8 @@ class LineLengthFilter(CodeFilter):
             else:
                 wrapped[-1] = current_line
         
-        return wrapped if len(wrapped) > 1 else [line]  # Fallback if wrapping didn't help
+        # Fallback if wrapping didn't help
+        return wrapped if len(wrapped) > 1 else [line]
     
     def _wrap_collection(self, line: str) -> List[str]:
         """Wrap collection literal lines."""
@@ -203,7 +207,8 @@ class ImportFilter(CodeFilter):
     
     def __init__(self):
         """Initialize import filter."""
-        super().__init__("import_filter", "Convert relative imports to absolute imports")
+        super().__init__("import_filter", "Convert relative imports to \
+        absolute imports")
     
     def apply(self, content: str, file_path: Path) -> str:
         """Convert relative imports to absolute imports.
@@ -221,7 +226,8 @@ class ImportFilter(CodeFilter):
         
         for line in lines:
             if line.strip().startswith('from .') and ' import ' in line:
-                new_line = self._convert_relative_import(line, file_path, project_root)
+                new_line = self._convert_relative_import(line, file_path, \
+                project_root)
                 filtered_lines.append(new_line)
             else:
                 filtered_lines.append(line)
@@ -232,15 +238,18 @@ class ImportFilter(CodeFilter):
         """Find project root by looking for common markers."""
         current = file_path.parent
         while current != current.parent:
-            if (current / 'setup.py').exists() or (current / 'pyproject.toml').exists():
+            if (current / 'setup.py').exists() or (current / \
+            'pyproject.toml').exists():
                 return current
             current = current.parent
         return file_path.parent
     
-    def _convert_relative_import(self, line: str, file_path: Path, project_root: Path) -> str:
+    def _convert_relative_import(self, line: str, file_path: Path, \
+    project_root: Path) -> str:
         """Convert a relative import to absolute import."""
         # Extract the relative import part and what's being imported
-        import_match = re.match(r'from\s+(\.+(?:\.\w*)?)\s+import\s+(.+)', line.strip())
+        import_match = re.match(r'from\s+(\.+(?:\.\w*)?)\s+import\s+(.+)', \
+        line.strip())
         if not import_match:
             return line
         
@@ -248,9 +257,11 @@ class ImportFilter(CodeFilter):
         imported_items = import_match.group(2)
         
         # Calculate the absolute module path
-        current_module_parts = file_path.relative_to(project_root).with_suffix('').parts
+        current_module_parts = \
+        file_path.relative_to(project_root).with_suffix('').parts
         level = len(relative_part) - len(relative_part.lstrip('.'))
-        target_parts = current_module_parts[:-level] if level > 0 else current_module_parts
+        target_parts = current_module_parts[:-level] if level > 0 else \
+        current_module_parts
         remaining = relative_part.lstrip('.')
         if remaining:
             target_parts = target_parts + (remaining,)
@@ -267,7 +278,8 @@ class PrintToLoggerFilter(CodeFilter):
     
     def __init__(self):
         """Initialize print to logger filter."""
-        super().__init__("print_to_logger_filter", "Convert print statements to logger calls")
+        super().__init__("print_to_logger_filter", "Convert print statements \
+        to logger calls")
         self.logger_import_added = False
     
     def apply(self, content: str, file_path: Path) -> str:
@@ -316,7 +328,8 @@ class PrintToLoggerFilter(CodeFilter):
         
         # Find position to insert logger setup (after imports)
         for i, line in enumerate(lines):
-            if line.strip() and not line.strip().startswith('#') and not line.startswith('import ') and not line.startswith('from '):
+            if line.strip() and not line.strip().startswith('#') and not \
+            line.startswith('import ') and not line.startswith('from '):
                 insert_pos = i
                 break
         
@@ -332,21 +345,25 @@ class PrintToLoggerFilter(CodeFilter):
     def _is_print_line(self, line: str) -> bool:
         """Check if line contains a print statement."""
         line = line.strip()
-        if line.startswith('print(') and line.endswith(')'):
+        if line.startswith('logger.info(') and line.endswith(')'):
             return True
-        if line.startswith('print ') and 'print(' not in line:
+        if line.startswith('print ') and 'logger.info(' not in line:
             return True
         return False
     
     def _convert_print_to_logger(self, line: str, line_num: int) -> str:
         """Convert print statement to logger call."""
         stripped = line.strip()
-        if stripped.startswith('print('):
-            args = stripped[6:-1]  # Remove 'print(' and ')'
-            return line.replace(f'print({args})', f'logger.info("line_{line_num}_output", extra={{"output": {args}}})')
+        if stripped.startswith('logger.info('):
+            args = stripped[6:-1]  # Remove 'logger.info(' and ')'
+            return line.replace(f'logger.info({args})', \
+            f'logger.info("line_{line_num}_output", extra={{"output": \
+            {args}}})')
         elif stripped.startswith('print '):
             args = stripped[6:]  # Remove 'print '
-            return line.replace(f'print {args}', f'logger.info("line_{line_num}_output", extra={{"output": {args}}})')
+            return line.replace(f'print {args}', \
+            f'logger.info("line_{line_num}_output", extra={{"output": \
+            {args}}})')
         return line
 
 
@@ -355,7 +372,8 @@ class HardcodedValueFilter(CodeFilter):
     
     def __init__(self):
         """Initialize hardcoded value filter."""
-        super().__init__("hardcoded_value_filter", "Extract hardcoded values to configuration")
+        super().__init__("hardcoded_value_filter", "Extract hardcoded values \
+        to configuration")
     
     def apply(self, content: str, file_path: Path) -> str:
         """Extract hardcoded values to configuration.
@@ -367,7 +385,8 @@ class HardcodedValueFilter(CodeFilter):
         Returns:
             Content with hardcoded values extracted
         """
-        # This is a complex transformation that would require more sophisticated
+        # This is a complex transformation that would require more \
+        sophisticated
         # analysis. For now, we'll return the content as-is but mark it for
         # future enhancement.
         return content
@@ -382,7 +401,8 @@ STANDARD_FILTERS = [
 ]
 
 
-def apply_filters(content: str, file_path: Path, filters: List[CodeFilter]) -> str:
+def apply_filters(content: str, file_path: Path, filters: List[CodeFilter]) \
+-> str:
     """Apply a list of filters to content.
     
     Args:

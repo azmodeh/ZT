@@ -4,7 +4,7 @@ __version__ = "1.0.0"
 
 
 # Import all utility functions for easy access
-from .helpers import (
+from app.utils.helpers import (
     validate_line_length,
     extract_hardcoded_values,
     find_print_statements,

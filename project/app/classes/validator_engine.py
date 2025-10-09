@@ -73,10 +73,12 @@ class ValidatorEngine:
             }
         
         # Check main.py line count
-        if file_path.name == 'main.py' and len(file_lines) > self.main_max_lines:
+        if file_path.name == 'main.py' and len(file_lines) > \
+        self.main_max_lines:
             violations.append({
                 'rule': 'main_max_lines',
-                'message': f'main.py exceeds {self.main_max_lines} lines ({len(file_lines)} lines)',
+                'message': f'main.py exceeds {self.main_max_lines} lines \
+                ({len(file_lines)} lines)',
                 'line': len(file_lines),
                 'severity': 'error'
             })
@@ -85,18 +87,22 @@ class ValidatorEngine:
         if len(file_lines) > self.max_file_lines:
             violations.append({
                 'rule': 'max_file_lines',
-                'message': f'File exceeds {self.max_file_lines} lines ({len(file_lines)} lines)',
+                'message': f'File exceeds {self.max_file_lines} lines \
+                ({len(file_lines)} lines)',
                 'line': len(file_lines),
                 'severity': 'warning'
             })
         
         # Validate line length
         if len(file_lines) > 1:  # Only check if file has content
-            line_violations = validate_line_length(content, self.max_line_length)
+            line_violations = validate_line_length(content, \
+            self.max_line_length)
             for violation in line_violations:
                 violations.append({
                     'rule': 'line_length',
-                    'message': f'Line {violation["line"]} exceeds {self.max_line_length} characters ({violation["length"]} chars)',
+                    'message': f'Line {violation["line"]} exceeds \
+                    {self.max_line_length} characters ({violation["length"]} \
+                    chars)',
                     'line': violation['line'],
                     'severity': 'warning'
                 })
@@ -107,7 +113,8 @@ class ValidatorEngine:
             for value in hardcoded_values:
                 violations.append({
                     'rule': 'hardcoded_values',
-                    'message': f'Hardcoded {value["type"]}: {repr(value["value"])} at line {value["line"]}',
+                    'message': f'Hardcoded {value["type"]}: \
+                    {repr(value["value"])} at line {value["line"]}',
                     'line': value['line'],
                     'severity': 'error'
                 })
@@ -129,7 +136,8 @@ class ValidatorEngine:
             for violation in import_violations:
                 violations.append({
                     'rule': 'absolute_imports_only',
-                    'message': f'Relative import found: {violation["module"]} at line {violation["line"]}',
+                    'message': f'Relative import found: \
+                    {violation["module"]} at line {violation["line"]}',
                     'line': violation['line'],
                     'severity': 'error'
                 })
@@ -140,7 +148,8 @@ class ValidatorEngine:
             for violation in type_hint_violations:
                 violations.append({
                     'rule': 'type_hints_required',
-                    'message': f'Function {violation["function"]} missing type hints at line {violation["line"]}',
+                    'message': f'Function {violation["function"]} missing \
+                    type hints at line {violation["line"]}',
                     'line': violation['line'],
                     'severity': 'warning'
                 })
@@ -195,8 +204,10 @@ class ValidatorEngine:
                 
                 # Add violations to results
                 if validation_result['violations']:
-                    results['violations_by_file'][str(file_path)] = validation_result['violations']
-                    results['total_violations'] += len(validation_result['violations'])
+                    results['violations_by_file'][str(file_path)] = \
+                    validation_result['violations']
+                    results['total_violations'] += \
+                    len(validation_result['violations'])
                     
                     # Count by severity and rule
                     for violation in validation_result['violations']:
@@ -205,15 +216,21 @@ class ValidatorEngine:
                         
                         if severity == 'error':
                             results['summary']['errors'] += 1
-                            results['summary']['errors_by_rule'][rule] = results['summary']['errors_by_rule'].get(rule, 0) + 1
+                            results['summary']['errors_by_rule'][rule] = \
+                            results['summary']['errors_by_rule'].get(rule, \
+                            0) + 1
                         else:
                             results['summary']['warnings'] += 1
-                            results['summary']['warnings_by_rule'][rule] = results['summary']['warnings_by_rule'].get(rule, 0) + 1
+                            results['summary']['warnings_by_rule'][rule] = \
+                            results['summary']['warnings_by_rule'].get(rule, \
+                            0) + 1
         
         # Calculate compliance score
-        total_possible_violations = results['files_validated'] * 10  # Assume max 10 violations per file
+        # Assume max 10 violations per file for scoring
+        total_possible_violations = results['files_validated'] * 10
         if total_possible_violations > 0:
-            compliance_score = ((total_possible_violations - results['total_violations']) / total_possible_violations) * 100
+            compliance_score = ((total_possible_violations - \
+            results['total_violations']) / total_possible_violations) * 100
             results['compliance_score'] = max(0, min(100, compliance_score))
         else:
             results['compliance_score'] = 100.0
@@ -294,5 +311,6 @@ class ValidationReport:
         else:
             # Return total for rule across all severities
             error_count = self.summary.get('errors_by_rule', {}).get(rule, 0)
-            warning_count = self.summary.get('warnings_by_rule', {}).get(rule, 0)
+            warning_count = self.summary.get('warnings_by_rule', \
+            {}).get(rule, 0)
             return error_count + warning_count

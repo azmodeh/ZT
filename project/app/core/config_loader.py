@@ -13,6 +13,6 @@ class ConfigLoader:
     def get_env_var(self, var_name: str) -> str:
         return os.getenv(var_name, "")
 
-    def save_config(self, config: Dict[str, Any]):
+    def save_config(self, config: Dict[str, Any]) -> None:
         with open(self.config_path, 'w') as file:
             yaml.safe_dump(config, file)

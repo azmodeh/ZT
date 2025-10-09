@@ -4,7 +4,7 @@ __version__ = "1.0.0"
 
 
 # Import all classes for easy access
-from .validator_engine import ValidatorEngine, ValidationReport
+from app.classes.validator_engine import ValidatorEngine, ValidationReport
 
 
 __all__ = [

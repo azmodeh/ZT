@@ -20,7 +20,8 @@ def configure_logging() -> None:
             config = yaml.safe_load(stream) or {}
         if config:
             logging.config.dictConfig(config)
-    logging.getLogger("zero_tolerance").debug("Logging configured from %s", log_config_path)
+    logging.getLogger("zero_tolerance").debug("Logging configured from %s", \
+    log_config_path)
     configure_logging._configured = True  # type: ignore[attr-defined]
 
 
