@@ -9,8 +9,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy project files
+# Copy requirements first for better caching
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
 COPY pyproject.toml .
 COPY main.py .
 COPY contract-enforcer-mcp/ ./contract-enforcer-mcp/
@@ -18,20 +21,20 @@ COPY enforcement/ ./enforcement/
 COPY app/ ./app/
 COPY data/ ./data/
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
 # Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV ZT_DOCKER_MODE=1
-ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1 \
+    ZT_DOCKER_MODE=1 \
+    PYTHONPATH=/app
 
-# Expose port (if needed for HTTP mode)
-EXPOSE 8080
+# Create a non-root user
+RUN useradd -m -u 1000 ztuser && \
+    chown -R ztuser:ztuser /app
+
+USER ztuser
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD python -c "import sys; sys.exit(0)"
 
-# Run the MCP server
-CMD ["python", "main.py"]
+# Run the MCP server with proper signal handling
+ENTRYPOINT ["python", "-u", "main.py"]
