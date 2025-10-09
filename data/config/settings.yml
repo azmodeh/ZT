@@ -1,0 +1,50 @@
+main_max_lines: 4
+no_print: true
+type_hints_required: true
+max_file_lines: 300
+max_line_length: 79
+no_hardcoded_values: true
+absolute_imports_only: true
+yaml_for_config: true
+english_logs: true
+persian_ui: true
+modular_architecture: true
+min_score: 90
+auto_fix: true
+max_passes: 3
+target_root: "../project"
+include_globs:
+  - "**/*.py"
+exclude_globs:
+  - "enforcement/**"
+  - "data/**"
+  - "logs/**"
+  - ".vscode/**"
+  - "**/*.bak"
+  - "**/__pycache__/**"
+  - "venv/**"
+  - ".venv/**"
+  - "node_modules/**"
+  - "dist/**"
+  - "build/**"
+validation:
+  enabled: true
+  strict_mode: true
+  report_violations: true
+  auto_fix_enabled: true
+  max_violations_before_fail: 10
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  handlers:
+    - type: "file"
+      filename: "logs/validation.log"
+      max_bytes: 10485760
+      backup_count: 5
+    - type: "console"
+ai_integration:
+  enabled: true
+  model: "gemini-2.0-flash"
+  temperature: 0.2
+  max_retries: 3
+  timeout: 30

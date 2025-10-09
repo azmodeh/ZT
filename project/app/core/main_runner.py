@@ -4,11 +4,17 @@ Main Application Runner
 """
 
 import sys
+import os
 from pathlib import Path
 
-# Add the project root to the Python path
+# Add the project root directory (where enforcement module is located) to the Python path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+# Also add the current working directory to ensure relative imports work
+current_dir = Path.cwd()
+if str(current_dir) not in sys.path:
+    sys.path.insert(0, str(current_dir))
 
 from app.core.config_loader import ConfigLoader
 from app.core.logger import get_logger
