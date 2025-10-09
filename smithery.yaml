@@ -9,7 +9,7 @@ startCommand:
   type: stdio
   command: python
   args:
-    - contract-enforcer-mcp/server.py
+    - main.py
   env:
     PYTHONPATH: "."
 
