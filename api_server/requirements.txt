@@ -1,0 +1,35 @@
+# Zero Tolerance API Server Dependencies
+# Python 3.8+ required
+
+# FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# HTTP Client & WebSocket
+httpx==0.25.2
+websockets==12.0
+
+# Data Validation & Serialization  
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# CORS & Security
+python-multipart==0.0.6
+
+# Async Support
+asyncio-mqtt==0.13.0
+aiofiles==23.2.1
+
+# Configuration & Environment
+python-dotenv==1.0.0
+PyYAML==6.0.1
+
+# Logging & Monitoring
+structlog==23.2.0
+rich==13.7.0
+
+# Development & Testing (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+flake8==6.1.0

@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-10-13T01:13:03.442673",
+  "file_path": "test.py",
+  "risk_score": 30,
+  "risk_level": "low",
+  "changed_lines": 4,
+  "added_lines": 2,
+  "deleted_lines": 2,
+  "deleted_blocks": 1,
+  "added_blocks": 1,
+  "modified_functions": [
+    "old",
+    "new"
+  ],
+  "modified_classes": [],
+  "import_changes": [],
+  "complexity_delta": 0,
+  "security_issues": {
+    "added": [],
+    "resolved": []
+  },
+  "recommendations": [
+    "Functions deleted: ['old'] - verify no breaking changes"
+  ],
+  "analysis_time": 0.000776
+}

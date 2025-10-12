@@ -1,0 +1,42 @@
+2025-10-11 20:33:05,053 - zero_tolerance.validator - INFO - Loaded 18 validation rules
+2025-10-11 20:33:05,054 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-11 20:33:05,055 - zero_tolerance.validator - ERROR - Validation failed for enforcement\validator_engine.py: 'int' object has no attribute 'get'
+2025-10-11 20:33:46,972 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-11 20:33:46,972 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-11 20:33:46,983 - zero_tolerance.validator - WARNING - Python AST analysis failed for enforcement\utils.py: isinstance expected 2 arguments, got 3
+2025-10-11 20:33:46,986 - zero_tolerance.validator - INFO - Validated enforcement\utils.py: 0 violations found
+2025-10-11 20:37:35,754 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-11 20:37:35,755 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-11 20:37:35,755 - zero_tolerance.validator - INFO - Validated project\main.py: 0 violations found
+2025-10-11 20:40:42,425 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-11 20:40:42,425 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-11 20:40:42,426 - zero_tolerance.validator - WARNING - Python AST analysis failed for project\app\core\main_runner.py: isinstance expected 2 arguments, got 3
+2025-10-11 20:40:42,426 - zero_tolerance.validator - INFO - Validated project\app\core\main_runner.py: 0 violations found
+2025-10-13 00:38:56,492 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 00:38:56,492 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 00:38:56,494 - zero_tolerance.validator - WARNING - Python AST analysis failed for project\app\core\main_runner.py: isinstance expected 2 arguments, got 3
+2025-10-13 00:38:56,494 - zero_tolerance.validator - INFO - Validated project\app\core\main_runner.py: 0 violations found
+2025-10-13 00:59:25,375 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 00:59:25,375 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 00:59:25,377 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 00:59:25,377 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 00:59:25,379 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 00:59:25,379 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 00:59:25,379 - zero_tolerance.validator - WARNING - Python AST analysis failed for test.py: isinstance expected 2 arguments, got 3
+2025-10-13 00:59:25,381 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 00:59:25,381 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 00:59:25,381 - zero_tolerance.validator - WARNING - Python AST analysis failed for bad.py: isinstance expected 2 arguments, got 3
+2025-10-13 01:08:52,163 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 01:08:52,163 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 01:12:33,131 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 01:12:33,131 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 01:12:33,134 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 01:12:33,134 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 01:12:33,145 - zero_tolerance.validator - WARNING - Python AST analysis failed for C:\Users\amina\AppData\Local\Temp\tmp3adh845l.py: isinstance expected 2 arguments, got 3
+2025-10-13 01:12:33,145 - zero_tolerance.validator - INFO - Validated C:\Users\amina\AppData\Local\Temp\tmp3adh845l.py: 2 violations found
+2025-10-13 01:13:03,426 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 01:13:03,427 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 01:13:03,432 - zero_tolerance.validator - INFO - Loaded 11 validation rules
+2025-10-13 01:13:03,433 - zero_tolerance.validator - INFO - Validator engine initialized with rules loaded
+2025-10-13 01:13:03,434 - zero_tolerance.validator - WARNING - Python AST analysis failed for C:\Users\amina\AppData\Local\Temp\tmp0um5o75f.py: isinstance expected 2 arguments, got 3
+2025-10-13 01:13:03,434 - zero_tolerance.validator - INFO - Validated C:\Users\amina\AppData\Local\Temp\tmp0um5o75f.py: 2 violations found

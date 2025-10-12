@@ -1,0 +1,502 @@
+#!/usr/bin/env python3
+"""
+Zero Tolerance REST API Server
+Complete API server for IDE integration and external tools
+
+Key Features:
+- Validation endpoints for files and workspaces
+- AI-powered fixes using agent manager
+- Learning insights and performance metrics
+- Real-time WebSocket for live updates
+- CORS and security headers
+"""
+
+import asyncio
+import json
+import logging
+import os
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Any
+
+import uvicorn
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+
+# Add ZT path to Python path
+if __package__ in (None, ""):
+    sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from enforcement.utils import get_logger, load_project_paths
+from enforcement.validator_engine import ValidatorEngine
+from enforcement.agent_manager import AgentManager
+from enforcement.auto_learning import LearningManager
+from enforcement.diff_analyzer import SmartDiffAnalyzer
+
+# Logging configuration with UTF-8 encoding
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('logs/api_server.log', encoding='utf-8'),
+        logging.StreamHandler()
+    ]
+)
+logger = get_logger("zero_tolerance.api_server")
+
+# FastAPI app
+app = FastAPI(
+    title="Zero Tolerance API Server",
+    description="REST API for Zero Tolerance code quality system",
+    version="2.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Restrict in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Global components
+validator_engine: Optional[ValidatorEngine] = None
+agent_manager: Optional[AgentManager] = None
+learning_manager: Optional[LearningManager] = None
+diff_analyzer: Optional[SmartDiffAnalyzer] = None
+connected_clients: List[WebSocket] = []
+
+# Pydantic models
+class ValidationRequest(BaseModel):
+    filePath: str = Field(..., description="File path for validation")
+    content: str = Field(..., description="File content")
+    language: str = Field(..., description="Programming language")
+
+class AIFixRequest(BaseModel):
+    filePath: str = Field(..., description="File path")
+    content: str = Field(..., description="File content")
+    language: str = Field(..., description="Programming language")
+    violations: List[Dict[str, Any]] = Field(..., description="List of violations")
+    range: Optional[Dict[str, int]] = Field(None, description="Line range")
+
+class FeedbackData(BaseModel):
+    fixId: str = Field(..., description="Fix identifier")
+    agentName: Optional[str] = Field(None, description="Agent name")
+    success: bool = Field(..., description="Fix success")
+    riskScore: int = Field(..., description="Risk score")
+    timestamp: str = Field(..., description="Timestamp")
+
+class WorkspaceValidationRequest(BaseModel):
+    workspacePath: str = Field(..., description="Workspace path")
+
+class QueueRunRequest(BaseModel):
+    priority: Optional[str] = Field("medium", description="Execution priority")
+    agentFilter: Optional[List[str]] = Field(None, description="Agent filter")
+
+
+# Helper function for standard JSON responses
+def success_response(data: Any, meta: Optional[Dict] = None) -> Dict:
+    """Standard success response format"""
+    response = {
+        "ok": True,
+        "data": data,
+        "meta": meta or {"timestamp": datetime.now().isoformat()}
+    }
+    return response
+
+def error_response(error: str, details: Optional[Dict] = None) -> Dict:
+    """Standard error response format"""
+    response = {
+        "ok": False,
+        "error": error,
+        "details": details,
+        "meta": {"timestamp": datetime.now().isoformat()}
+    }
+    return response
+
+def validate_zt_target(path: str) -> bool:
+    """Validate path is within ZT_TARGET"""
+    zt_target = os.getenv('ZT_TARGET', '.')
+    try:
+        target_path = Path(zt_target).resolve()
+        check_path = Path(path).resolve()
+        return check_path.is_relative_to(target_path)
+    except Exception:
+        return False
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize components with error handling"""
+    global validator_engine, agent_manager, learning_manager, diff_analyzer
+    
+    try:
+        logger.info("Initializing Zero Tolerance API Server...")
+        
+        # Initialize core components
+        validator_engine = ValidatorEngine()
+        agent_manager = AgentManager()
+        learning_manager = LearningManager()
+        diff_analyzer = SmartDiffAnalyzer()
+        
+        logger.info("All components initialized successfully")
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize components: {e}")
+        raise
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Clean up resources"""
+    logger.info("Shutting down Zero Tolerance API Server...")
+    
+    # Close WebSocket connections
+    for client in connected_clients:
+        try:
+            await client.close()
+        except:
+            pass
+    connected_clients.clear()
+
+
+@app.get("/")
+async def root():
+    """API root page"""
+    return {
+        "message": "Zero Tolerance API Server",
+        "version": "2.0.0",
+        "status": "running",
+        "timestamp": datetime.now().isoformat(),
+        "endpoints": {
+            "docs": "/docs",
+            "validation": "/api/validate",
+            "ai_fixes": "/api/ai-fix",
+            "learning": "/api/learning/insights",
+            "status": "/api/status"
+        }
+    }
+
+
+@app.get("/api/status")
+async def get_server_status():
+    """Server and components status"""
+    try:
+        # Check agent status
+        active_agents = []
+        if agent_manager:
+            agent_stats = await agent_manager.get_agent_stats()
+            active_agents = list(agent_stats.keys())
+        
+        # Queue status
+        queue_size = 0
+        if learning_manager:
+            stats = learning_manager.get_learning_stats()
+            queue_size = stats.get("total_tasks", 0)
+        
+        return {
+            "status": "healthy",
+            "version": "2.0.0",
+            "uptime": time.time(),  # Simplified
+            "activeAgents": active_agents,
+            "queueSize": queue_size,
+            "connectedClients": len(connected_clients),
+            "components": {
+                "validator": validator_engine is not None,
+                "agentManager": agent_manager is not None,
+                "learningManager": learning_manager is not None,
+                "diffAnalyzer": diff_analyzer is not None
+            }
+        }
+    except Exception as e:
+        logger.error(f"Status check failed: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Status check failed", "details": str(e)}
+        )
+
+
+@app.post("/api/validate")
+async def validate_file(request: ValidationRequest):
+    """اعتبارسنجی یک فایل"""
+    if not validator_engine:
+        raise HTTPException(status_code=503, detail="Validator engine not available")
+    
+    try:
+        logger.info(f"Validating file: {request.filePath}")
+        
+        # ذخیره موقت فایل برای اعتبارسنجی
+        temp_file = Path(f"/tmp/zt_validate_{int(time.time())}.py")
+        temp_file.write_text(request.content, encoding='utf-8')
+        
+        try:
+            # اجرای اعتبارسنجی
+            result = validator_engine.validate_file(str(temp_file))
+            
+            # تبدیل به فرمت مورد انتظار
+            violations = []
+            for violation in result.get("violations", []):
+                violations.append({
+                    "line": violation.get("line"),
+                    "column": violation.get("column", 1),
+                    "endColumn": violation.get("column", 1) + len(violation.get("context", "")),
+                    "ruleId": violation.get("rule_id"),
+                    "message": violation.get("message"),
+                    "severity": violation.get("severity", "warning"),
+                    "suggestion": violation.get("suggestion")
+                })
+            
+            summary = {
+                "total": len(violations),
+                "critical": len([v for v in violations if v["severity"] == "critical"]),
+                "warning": len([v for v in violations if v["severity"] == "warning"]),
+                "info": len([v for v in violations if v["severity"] == "info"])
+            }
+            
+            # اطلاع به کلاینت‌ها
+            await broadcast_to_clients({
+                "type": "validation_completed",
+                "file": request.filePath,
+                "violations": len(violations)
+            })
+            
+            return {
+                "violations": violations,
+                "summary": summary
+            }
+            
+        finally:
+            # پاک کردن فایل موقت
+            if temp_file.exists():
+                temp_file.unlink()
+                
+    except Exception as e:
+        logger.error(f"Validation failed for {request.filePath}: {e}")
+        raise HTTPException(status_code=500, detail=f"Validation failed: {str(e)}")
+
+
+@app.post("/api/ai-fix")
+async def get_ai_fixes(request: AIFixRequest):
+    """دریافت پیشنهادات اصلاح AI"""
+    if not agent_manager:
+        raise HTTPException(status_code=503, detail="Agent manager not available")
+    
+    try:
+        logger.info(f"Getting AI fixes for: {request.filePath}")
+        
+        # تعیین نوع task بر اساس violations
+        task_type = determine_task_type(request.violations)
+        
+        # اجرای agent برای اصلاح
+        result = await agent_manager.dispatch_task(
+            task_type=task_type,
+            file_path=request.filePath,
+            content=request.content,
+            context={
+                "violations": request.violations,
+                "language": request.language,
+                "range": request.range
+            }
+        )
+        
+        if not result["success"]:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"AI fix failed: {result.get('error', 'Unknown error')}"
+            )
+        
+        # تبدیل patches به AIFix format
+        fixes = []
+        if isinstance(result["result"], str):
+            patches = json.loads(result["result"])
+        else:
+            patches = result["result"]
+        
+        for i, patch in enumerate(patches):
+            # تحلیل diff برای ریسک
+            diff_analysis = diff_analyzer.analyze_diff(
+                request.content,
+                patch["content"], 
+                request.filePath
+            )
+            
+            fix = {
+                "id": f"fix_{int(time.time())}_{i}",
+                "type": "replacement",  # ساده‌سازی - می‌توان پیچیده‌تر کرد
+                "description": f"AI fix by {result.get('agent_name', 'Unknown')}",
+                "agentName": result.get("agent_name"),
+                "riskScore": diff_analysis["risk_score"],
+                "range": {
+                    "startLine": 1,
+                    "startColumn": 1,
+                    "endLine": len(request.content.split('\n')),
+                    "endColumn": 1
+                },
+                "newText": patch["content"]
+            }
+            fixes.append(fix)
+        
+        # ثبت در سیستم یادگیری
+        if learning_manager:
+            learning_manager.record_result(
+                task_name=task_type,
+                success=True,
+                score=result.get("score", 85),
+                agent_name=result.get("agent_name"),
+                execution_time=result.get("execution_time", 0),
+                violations=[v.get("ruleId") for v in request.violations]
+            )
+        
+        return {
+            "fixes": fixes,
+            "agentUsed": result.get("agent_name"),
+            "executionTime": result.get("execution_time"),
+            "learningInsights": learning_manager.suggest_actions() if learning_manager else []
+        }
+        
+    except Exception as e:
+        logger.error(f"AI fix failed for {request.filePath}: {e}")
+        raise HTTPException(status_code=500, detail=f"AI fix failed: {str(e)}")
+
+
+@app.post("/api/feedback")
+async def send_feedback(feedback: FeedbackData):
+    """ثبت بازخورد کاربر"""
+    try:
+        logger.info(f"Received feedback for fix {feedback.fixId}")
+        
+        # ثبت در سیستم یادگیری
+        if learning_manager and feedback.agentName:
+            learning_manager.record_result(
+                task_name="user_feedback",
+                success=feedback.success,
+                score=100 if feedback.success else 0,
+                agent_name=feedback.agentName,
+                execution_time=0
+            )
+        
+        return {"message": "Feedback recorded successfully"}
+        
+    except Exception as e:
+        logger.error(f"Failed to record feedback: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to record feedback: {str(e)}")
+
+
+@app.get("/api/learning/insights")
+async def get_learning_insights():
+    """دریافت بینش‌های یادگیری"""
+    if not learning_manager:
+        raise HTTPException(status_code=503, detail="Learning manager not available")
+    
+    try:
+        stats = learning_manager.get_learning_stats()
+        suggestions = learning_manager.suggest_actions()
+        
+        # آمار عملکرد ایجنت‌ها
+        agent_performance = {}
+        if agent_manager:
+            agent_stats = await agent_manager.get_agent_stats()
+            for agent_name, data in agent_stats.items():
+                agent_performance[agent_name] = {
+                    "tasks": data.get("tasks_completed", 0),
+                    "success": data.get("success_rate", 0),
+                    "avgScore": data.get("average_score", 0)
+                }
+        
+        # الگوهای شناسایی شده
+        patterns = []
+        common_patterns = stats.get("common_patterns", {})
+        for pattern, frequency in common_patterns.items():
+            patterns.append({
+                "pattern": pattern,
+                "frequency": frequency,
+                "bestAgent": learning_manager.get_best_agent_for_task(pattern) or "Unknown"
+            })
+        
+        return {
+            "totalTasks": stats.get("total_tasks", 0),
+            "successRate": stats.get("success_rate", 0.0),
+            "agentPerformance": agent_performance,
+            "suggestions": suggestions,
+            "patterns": patterns
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get learning insights: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get insights: {str(e)}")
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket برای به‌روزرسانی‌های real-time"""
+    await websocket.accept()
+    connected_clients.append(websocket)
+    logger.info("New WebSocket client connected")
+    
+    try:
+        while True:
+            # پینگ برای حفظ اتصال
+            await asyncio.sleep(30)
+            await websocket.send_json({"type": "ping"})
+            
+    except WebSocketDisconnect:
+        logger.info("WebSocket client disconnected")
+        if websocket in connected_clients:
+            connected_clients.remove(websocket)
+
+
+async def broadcast_to_clients(message: Dict[str, Any]):
+    """ارسال پیام به تمام کلاینت‌های متصل"""
+    if not connected_clients:
+        return
+    
+    disconnected = []
+    for client in connected_clients:
+        try:
+            await client.send_json(message)
+        except:
+            disconnected.append(client)
+    
+    # حذف اتصالات قطع شده
+    for client in disconnected:
+        connected_clients.remove(client)
+
+
+def determine_task_type(violations: List[Dict[str, Any]]) -> str:
+    """تعیین نوع task بر اساس violations"""
+    violation_types = [v.get("ruleId", "") for v in violations]
+    
+    # قوانین اولویت‌بندی
+    if any("hardcoded" in vt for vt in violation_types):
+        return "security_fix"
+    elif any("print" in vt or "console" in vt for vt in violation_types):
+        return "print_removal" 
+    elif any("complexity" in vt for vt in violation_types):
+        return "refactoring"
+    elif any("type" in vt or "hint" in vt for vt in violation_types):
+        return "type_hints"
+    else:
+        return "general_fix"
+
+
+if __name__ == "__main__":
+    # تنظیمات سرور
+    host = os.getenv("ZT_API_HOST", "localhost")
+    port = int(os.getenv("ZT_API_PORT", "8080"))
+    
+    logger.info(f"Starting Zero Tolerance API Server on {host}:{port}")
+    
+    uvicorn.run(
+        app,
+        host=host,
+        port=port,
+        log_level="info",
+        access_log=True,
+        reload=False  # در production False
+    )

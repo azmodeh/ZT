@@ -1,0 +1,226 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ZT: SAFE Pipeline",
+      "type": "shell",
+      "command": "python",
+      "args": ["${workspaceFolder}/enforcement/ai_queue.py"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ZT_HOME": "${workspaceFolder}",
+          "ZT_TARGET": "${workspaceFolder}",
+          "ZT_MODE": "safe",
+          "ZT_MIN_SCORE": "90",
+          "ZT_MAX_PASSES": "2",
+          "ZT_BATCH_SIZE": "80",
+          "ZT_MAX_WORKERS": "2",
+          "ZT_CFG": "data/config/cost_optimizer.yml",
+          "OPENROUTER_API_KEY": "${env:OPENROUTER_API_KEY}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: TURBO Pipeline",
+      "type": "shell",
+      "command": "python",
+      "args": ["${workspaceFolder}/enforcement/ai_queue.py"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ZT_HOME": "${workspaceFolder}",
+          "ZT_TARGET": "${workspaceFolder}",
+          "ZT_MODE": "turbo",
+          "ZT_MIN_SCORE": "90",
+          "ZT_MAX_PASSES": "3",
+          "ZT_BATCH_SIZE": "150",
+          "ZT_MAX_WORKERS": "4",
+          "ZT_CFG": "data/config/cost_optimizer.yml",
+          "OPENROUTER_API_KEY": "${env:OPENROUTER_API_KEY}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Validate Project",
+      "type": "shell",
+      "command": "python",
+      "args": ["${workspaceFolder}/enforcement/validator_engine.py", "${workspaceFolder}"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Show Budget Status",
+      "type": "shell",
+      "command": "python",
+      "args": ["-c", "import yaml; cfg=yaml.safe_load(open('data/config/cost_optimizer.yml')); print(f'💰 Daily Budget: ${cfg[\"budget\"][\"daily_cents\"]/100}\\n💵 Per Run: ${cfg[\"budget\"][\"per_run_cents\"]/100}\\n⚠️ Stop if exceeded: {cfg[\"budget\"][\"stop_if_exceeded\"]}')"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Test Cost Optimizer",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pytest", "-q", "tests/test_cost_optimizer_pytest.py", "-v"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Quick Test All",
+      "type": "shell",
+      "command": "python",
+      "args": ["test_cost_optimizer.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT API: Run",
+      "type": "shell",
+      "command": "python",
+      "args": ["api_server/start_server.py"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ZT_HOME": "${workspaceFolder}",
+          "ZT_TARGET": "${workspaceFolder}",
+          "ZT_API_HOST": "127.0.0.1",
+          "ZT_API_PORT": "8088",
+          "ZT_CFG": "data/config/cost_optimizer.yml",
+          "OPENROUTER_API_KEY": "${env:OPENROUTER_API_KEY}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "ZT API: Smoke Test",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile", "-Command",
+        "Write-Host '🧪 Testing /health...'; Invoke-RestMethod http://127.0.0.1:8088/health | ConvertTo-Json; Write-Host ''; Write-Host '🧪 Testing /validate...'; $body = @{} | ConvertTo-Json; Invoke-RestMethod http://127.0.0.1:8088/validate -Method Post -ContentType 'application/json' -Body $body | ConvertTo-Json"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT API: Test All Endpoints",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile", "-Command",
+        "$h=Invoke-RestMethod http://127.0.0.1:8088/health; Write-Host \"✅ /health: $($h.ok)\"; $v=@{} | ConvertTo-Json; $r=Invoke-RestMethod http://127.0.0.1:8088/validate -Method Post -ContentType 'application/json' -Body $v; Write-Host \"✅ /validate: score=$($r.score)\"; Write-Host \"✅ All tests passed!\""
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Dry-Run (Safe)",
+      "type": "shell",
+      "command": "python",
+      "args": ["enforcement/ai_queue.py"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "ZT_HOME": "${workspaceFolder}",
+          "ZT_TARGET": "${workspaceFolder}",
+          "ZT_MODE": "safe",
+          "ZT_DRY_RUN": "1",
+          "ZT_CFG": "data/config/cost_optimizer.yml",
+          "OPENROUTER_API_KEY": "${env:OPENROUTER_API_KEY}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Test Sentinel Guard",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pytest", "tests/test_sentinel_path_guard.py", "-v"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ZT: Rollback from .bak",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile", "-Command",
+        "$count=0; Get-ChildItem -Recurse -Filter *.bak | ForEach-Object { $orig = $_.FullName -replace '\\.bak$',''; Copy-Item $_.FullName $orig -Force; $count++ }; Write-Host \"✅ Rolled back $count files from .bak\""
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

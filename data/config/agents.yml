@@ -1,0 +1,205 @@
+# Zero Tolerance - Agent Configuration
+# تنظیمات ایجنت‌های هوش مصنوعی برای انجام وظایف تخصصی
+
+agents:
+  - name: "CodeFixAgent"
+    description: "ایجنت تخصصی رفع خطاهای کد و refactoring"
+    prompt: |
+      You are CodeFixAgent, specialized in fixing code syntax and structure issues.
+      
+      Your primary tasks:
+      - Fix syntax errors and compilation issues
+      - Replace print() and console.log() statements with proper logging
+      - Reduce cyclomatic complexity by refactoring complex functions
+      - Improve code structure and readability
+      - Enforce Zero Tolerance contract rules
+      
+      Guidelines:
+      - Always use structured logging instead of print statements
+      - Break down complex functions into smaller, focused ones
+      - Follow Python/JavaScript best practices
+      - Maintain code functionality while improving structure
+      - Return complete, executable code
+      
+      Output format: JSON array of fixes in format:
+      [{"path": "file_path", "content": "complete_file_content"}]
+    
+    model: "gpt-3.5-turbo"
+    max_tokens: 2000
+    temperature: 0.1
+    enabled: true
+    specialties:
+      - "syntax_errors"
+      - "print_removal" 
+      - "console_log_fix"
+      - "complexity_reduction"
+      - "function_refactor"
+      - "import_fixes"
+
+  - name: "DocAgent"
+    description: "ایجنت تخصصی مستندسازی و type hints"
+    prompt: |
+      You are DocAgent, specialized in code documentation and type safety.
+      
+      Your primary tasks:
+      - Add proper type hints to all functions and variables
+      - Generate comprehensive docstrings for functions, classes, and modules
+      - Create or update README files with clear documentation
+      - Add helpful inline comments for complex logic
+      - Ensure code is self-documenting
+      
+      Guidelines:
+      - Use proper Python type hints (typing module)
+      - Follow Google or NumPy docstring conventions
+      - Write clear, concise documentation in English
+      - Include examples in docstrings where helpful
+      - Document all public APIs thoroughly
+      
+      Output format: JSON array of documentation fixes:
+      [{"path": "file_path", "content": "complete_documented_file_content"}]
+    
+    model: "gpt-3.5-turbo"
+    max_tokens: 1500
+    temperature: 0.2
+    enabled: true
+    specialties:
+      - "type_hints"
+      - "docstrings"
+      - "readme_generation"
+      - "api_documentation" 
+      - "code_comments"
+      - "documentation_review"
+
+  - name: "SecurityAgent" 
+    description: "ایجنت تخصصی امنیت و حذف hardcoded values"
+    prompt: |
+      You are SecurityAgent, specialized in code security and best practices.
+      
+      Your primary tasks:
+      - Identify and remove hardcoded passwords, API keys, and secrets
+      - Replace hardcoded configuration with environment variables
+      - Add input validation and sanitization
+      - Fix security vulnerabilities and unsafe practices
+      - Enforce secure coding standards
+      
+      Guidelines:
+      - Never leave credentials in code - use environment variables
+      - Add proper input validation for all external inputs
+      - Use secure defaults and fail-safe mechanisms
+      - Follow OWASP security guidelines
+      - Suggest secure alternatives for unsafe patterns
+      
+      Output format: JSON array of security fixes:
+      [{"path": "file_path", "content": "complete_secure_file_content"}]
+    
+    model: "gpt-4"
+    max_tokens: 1800
+    temperature: 0.0
+    enabled: true
+    specialties:
+      - "hardcoded_secrets"
+      - "env_config"
+      - "security_vulnerabilities"
+      - "input_validation"
+      - "credential_removal"
+      - "security_review"
+
+# تنظیمات اجرایی
+execution_order:
+  - "SecurityAgent"    # اول: رفع مسائل امنیتی
+  - "CodeFixAgent"     # دوم: اصلاح کد و ساختار
+  - "DocAgent"         # سوم: مستندسازی
+
+# تنظیمات عمومی
+settings:
+  parallel_execution: false  # اجرای متوالی برای اطمینان از کیفیت
+  max_retries: 2
+  timeout_seconds: 60
+  auto_fallback: true        # استفاده از rewriter در صورت عدم تغییر
+  
+  # تنظیمات کیفیت
+  quality_gates:
+    min_success_rate: 0.7    # حداقل نرخ موفقیت مورد انتظار
+    max_risk_score: 70       # حداکثر ریسک مجاز برای اعمال خودکار
+    require_backup: true     # ایجاد backup قبل از اعمال تغییرات
+
+# نگاشت انواع وظایف به ایجنت‌ها
+task_mapping:
+  # CodeFixAgent tasks
+  "print_removal": "CodeFixAgent"
+  "console_log_fix": "CodeFixAgent"
+  "syntax_error": "CodeFixAgent" 
+  "complexity_reduction": "CodeFixAgent"
+  "refactoring": "CodeFixAgent"
+  "import_fixes": "CodeFixAgent"
+  
+  # DocAgent tasks
+  "type_hints": "DocAgent"
+  "docstrings": "DocAgent"
+  "documentation": "DocAgent"
+  "comments": "DocAgent"
+  "readme": "DocAgent"
+  "api_docs": "DocAgent"
+  
+  # SecurityAgent tasks
+  "hardcoded_secrets": "SecurityAgent"
+  "env_config": "SecurityAgent"
+  "security_fix": "SecurityAgent"
+  "input_validation": "SecurityAgent"
+  "credential_removal": "SecurityAgent"
+
+# مدل‌های پیشنهادی برای انواع مختلف وظایف
+model_recommendations:
+  fast_tasks:           # وظایف ساده و سریع
+    - "gpt-3.5-turbo"
+    - "claude-instant"
+  
+  complex_tasks:        # وظایف پیچیده
+    - "gpt-4"
+    - "claude-3-opus"
+  
+  security_tasks:       # وظایف امنیتی
+    - "gpt-4"
+    - "claude-3.5-sonnet"
+  
+  documentation_tasks:  # مستندسازی
+    - "gpt-3.5-turbo"
+    - "claude-3-haiku"
+
+# تنظیمات learning و adaptive behavior
+learning:
+  enabled: true
+  update_frequency: 10      # هر 10 وظیفه یکبار به‌روزرسانی
+  min_data_points: 5        # حداقل نمونه برای یادگیری
+  adaptation_rate: 0.1      # نرخ تطبیق (0.0 - 1.0)
+  
+  # معیارهای ارزیابی
+  success_metrics:
+    - "task_completion"     # تکمیل موفق وظیفه
+    - "code_quality"        # کیفیت کد تولیدی
+    - "execution_time"      # زمان اجرا
+    - "user_satisfaction"   # رضایت کاربر (اختیاری)
+
+# هشدارها و اعلان‌ها  
+notifications:
+  # هشدار برای ریسک بالا
+  high_risk_threshold: 80
+  high_risk_message: "⚠️ تغییرات پرخطر شناسایی شد - بررسی دستی توصیه می‌شود"
+  
+  # اعلان موفقیت
+  success_message: "✅ وظیفه با موفقیت انجام شد"
+  
+  # اعلان شکست
+  failure_message: "❌ اجرای وظیفه با مشکل مواجه شد"
+
+# آمار و گزارش‌دهی
+reporting:
+  enabled: true
+  save_detailed_logs: true
+  performance_tracking: true
+  
+  # مسیرهای گزارش
+  paths:
+    performance_log: "logs/ai_actions/agent_performance.log"
+    task_history: "data/cache/task_history.json"
+    learning_profile: "data/cache/learning_profile.json"

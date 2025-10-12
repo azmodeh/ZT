@@ -1,0 +1,88 @@
+# Cost & Model Optimization for ZT Server
+# هدف: کاهش هزینه تماس‌های AI با اولویت‌بندی، فیلتر، و بودجه‌بندی
+
+# ✅ بودجه و توقف اضطراری
+budget:
+  daily_cents: 1500           # بودجه روزانه (به سنت). مثلاً 15 دلار
+  per_run_cents: 400          # سقف هر اجرای صف
+  stop_if_exceeded: true      # اگر بودجه رد شد، صف متوقف شود
+
+# ✅ سطوح مدل (ارزان/میانه/گران) و موارد استفاده
+models:
+  # Ultra Fast & Free
+  free: "meta-llama/llama-3.3-70b-instruct:free"  # کارهای خیلی ساده / رایگان
+  
+  # Fast & Cheap
+  fast: "gpt-4o-mini"                    # OpenAI ارزان
+  fast_alt: "google/gemini-2.0-flash-exp:free"  # Google ارزان/رایگان
+  fast_groq: "groq/llama-3.3-70b-versatile"     # Groq فوق سریع
+  
+  # Medium
+  medium: "mistralai/mixtral-8x7b"       # رفرکتور متوسط
+  medium_alt: "mistralai/mistral-large"  # Mistral قوی‌تر
+  medium_nvidia: "nvidia/llama-3.1-nemotron-70b" # Nvidia
+  
+  # Deep & Powerful
+  deep: "anthropic/claude-3-opus"        # امنیت/منطق حساس
+  deep_alt: "google/gemini-exp-1206"     # Google experimental
+  
+  # Local (Ollama)
+  local: "ollama/llama3.2"               # اجرای محلی / رایگان
+
+routing:
+  rules:
+    # اولویت ۱: sensitive_data همیشه local (حتی اگر risk پایین باشد)
+    - when: "sensitive_data == true"
+      use: local           # همیشه محلی برای داده‌های حساس
+    
+    # اولویت ۲: ریسک خیلی پایین (رایگان)
+    - when: "risk <= 10"
+      use: free
+      
+    # اولویت ۳: ریسک پایین (سریع و ارزان)
+    - when: "risk > 10 and risk <= 20"
+      use: fast  # یا fast_alt یا fast_groq
+      
+    # اولویت ۴: ریسک متوسط
+    - when: "risk > 20 and risk <= 50"
+      use: medium  # یا medium_alt یا medium_nvidia
+      
+    # اولویت ۵: ریسک بالا (قوی و دقیق)
+    - when: "risk > 50 and risk <= 80"
+      use: deep  # یا deep_alt
+      
+    # اولویت ۶: ریسک خیلی بالا (local برای privacy)
+    - when: "risk > 80"
+      use: local           # privacy-first برای تغییرات خیلی سنگین
+
+# ✅ محدودیت توکن/طول برای کاهش هزینه
+limits:
+  max_tokens_request: 2000      # برش کانتکست قبل از ارسال
+  max_tokens_response: 1200
+  chunk_lines: 160              # ارسال فقط بخش‌های تغییر یافته (Smart Diff)
+
+# ✅ دسته‌بندی فایل‌ها (Batch) و موازی‌سازی امن
+batching:
+  batch_size: 100
+  max_workers: 4
+  skip_globs:
+    - "**/node_modules/**"
+    - "**/.venv/**"
+    - "**/venv/**"
+    - "**/dist/**"
+    - "**/logs/**"
+    - "**/cache/**"
+    - "**/__pycache__/**"
+    - "**/*.bak"
+
+# ✅ سیاست اعتبارسنجی و تلاش مجدد
+policy:
+  min_score: 90
+  max_passes: 3
+  proof_of_change: true         # فقط موفق اگر پچ یا تغییر واقعی رخ دهد
+  risk_block_threshold: 70      # اگر ریسک > 70، پچ خودکار اعمال نشود
+
+# ✅ یادگیری هزینه‌محور
+learning:
+  decay: 0.7                    # وزن‌دهی نتایج جدید نسبت به قدیم
+  penalize_noop: true           # اگر پچ خالی بود، مسیر را جریمه کن

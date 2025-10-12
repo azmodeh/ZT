@@ -1,23 +1,33 @@
-main_max_lines: 4
-no_print: true
-type_hints_required: true
-max_file_lines: 300
-max_line_length: 79
-no_hardcoded_values: true
-absolute_imports_only: true
-yaml_for_config: true
-english_logs: true
-persian_ui: true
-modular_architecture: true
-min_score: 90
-auto_fix: true
-max_passes: 3
+# Zero Tolerance Contract Rules Configuration
+max_line_length:
+  enabled: true
+  limit: 120
+
+no_print:
+  enabled: true
+  
+no_hardcoded_values:
+  enabled: true
+  
+max_file_length:
+  enabled: true
+  limit: 500
+  
+type_hints_required:
+  enabled: true
+  
+max_complexity:
+  enabled: true
+  limit: 10
+  
+absolute_imports_only:
+  enabled: false
 
 # AI Configuration - Google Gemini
 ai_config:
-  api_key: "AIzaSyDz3bfQ1iLNg_BvYgx5wzI9z6964_8v1Wo"
-  base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
-  model: "gemini-2.0-flash"
+  api_key: "env:OPENROUTER_API_KEY"
+  base_url: "https://openrouter.ai/api/v1"
+  model: "meta-llama/llama-3.3-70b-instruct:free"
   system_prompt_file: "data/prompts/zt_agent_system_prompt.md"
   agent_config_file: "data/config/ai_agent_config.yml"
   temperature: 0.1

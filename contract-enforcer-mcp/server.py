@@ -193,15 +193,15 @@ def _cached_validation(base_path: str, config_hash: str) -> Dict[str, Any]:
     try:
         # SECURE: Use secure module imports
         validator_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "validator.py",
-            "enforcement.validator"
+            ENFORCEMENT_MODULE_PATH / "validator_engine.py",
+            "enforcement.validator_engine"
         )
         utils_module = secure_import_module(
             ENFORCEMENT_MODULE_PATH / "utils.py",
             "enforcement.utils"
         )
         
-        Validator = validator_module.Validator
+        ValidatorEngine = validator_module.ValidatorEngine
         ProjectPaths = utils_module.ProjectPaths
 
         rules = load_contract_rules()
@@ -218,15 +218,41 @@ def _cached_validation(base_path: str, config_hash: str) -> Dict[str, Any]:
             raise ValueError("File validation failed: Too many files or files too large")
         
         paths = ProjectPaths(base_path_obj, include_globs, exclude_globs)
-        validator = Validator(rules, paths)
-        report = validator.run()
+        validator_engine = ValidatorEngine()
         
-        # Add security metadata
-        result = report.to_dict()
-        result["security_info"] = {
-            "config_hash": config_hash,
-            "validation_timestamp": str(Path(base_path).stat().st_mtime),
-            "server_version": "ZT-MCP-SECURE-1.0"
+        # Validate all Python files in the project
+        total_violations = 0
+        files_scanned = 0
+        all_violations = []
+        
+        for file_path in paths.iter_python_files():
+            try:
+                result = validator_engine.validate_file(file_path)
+                files_scanned += 1
+                total_violations += len(result.violations)
+                all_violations.extend([
+                    {
+                        "file": result.file_path,
+                        "rule_id": v.rule_id,
+                        "message": v.message,
+                        "severity": v.severity,
+                        "line": v.line,
+                        "column": v.column
+                    } for v in result.violations
+                ])
+            except Exception as e:
+                logger.warning(f"Failed to validate {file_path}: {e}")
+        
+        # Create report in expected format
+        result = {
+            "total_violations": total_violations,
+            "files_scanned": files_scanned,
+            "violations": all_violations,
+            "security_info": {
+                "config_hash": config_hash,
+                "validation_timestamp": str(Path(base_path).stat().st_mtime),
+                "server_version": "ZT-MCP-SECURE-2.0"
+            }
         }
         
         return result
@@ -444,15 +470,15 @@ def get_compliance_status() -> dict:
     try:
         # SECURE: Use secure module imports
         validator_module = secure_import_module(
-            ENFORCEMENT_MODULE_PATH / "validator.py",
-            "enforcement.validator"
+            ENFORCEMENT_MODULE_PATH / "validator_engine.py",
+            "enforcement.validator_engine"
         )
         utils_module = secure_import_module(
             ENFORCEMENT_MODULE_PATH / "utils.py",
             "enforcement.utils"
         )
         
-        Validator = validator_module.Validator
+        ValidatorEngine = validator_module.ValidatorEngine
         ProjectPaths = utils_module.ProjectPaths
         
         rules = load_contract_rules()
@@ -461,13 +487,27 @@ def get_compliance_status() -> dict:
             rules.get("include_globs", []),
             rules.get("exclude_globs", []),
         )
-        validator = Validator(rules, paths)
-        report = validator.run()
+        validator_engine = ValidatorEngine()
+        
+        # Validate all Python files
+        total_violations = 0
+        files_scanned = 0
+        
+        for file_path in paths.iter_python_files():
+            try:
+                result = validator_engine.validate_file(file_path)
+                files_scanned += 1
+                total_violations += len(result.violations)
+            except Exception as e:
+                logger.warning(f"Failed to validate {file_path}: {e}")
+        
+        compliance_score = max(0, 100 - (total_violations * 10))  # Simple scoring
+        
         return {
-            "status": "PASS" if report.total_violations == 0 else "FAIL",
-            "compliance_score": report.compliance_score(),
-            "total_violations": report.total_violations,
-            "files_scanned": report.files_scanned,
+            "status": "PASS" if total_violations == 0 else "FAIL",
+            "compliance_score": compliance_score,
+            "total_violations": total_violations,
+            "files_scanned": files_scanned,
         }
     except Exception as e:
         logger.error(f"Error generating compliance status: {e}")

@@ -1,25 +1,181 @@
 version: '3.8'
 
+# Zero Tolerance System - Production Deployment
+# Complete stack with API, Queue, and Monitoring
+
 services:
-  zt-mcp-server:
+  # ============================================================================
+  # API Server - REST API for external integrations
+  # ============================================================================
+  zt-api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: zero-tolerance-mcp
-    restart: unless-stopped
-    environment:
-      - ZT_DOCKER_MODE=1
-      - PYTHONUNBUFFERED=1
+    image: zero-tolerance:2.0.0
+    container_name: zt-api
     ports:
-      - "8080:8080"
+      - "${ZT_API_PORT:-8088}:8088"
+    environment:
+      # ZT Configuration
+      - ZT_HOME=/app
+      - ZT_TARGET=/workspace
+      - ZT_API_HOST=0.0.0.0
+      - ZT_API_PORT=8088
+      - ZT_MIN_SCORE=90
+      - ZT_MODE=safe
+      - ZT_DRY_RUN=${ZT_DRY_RUN:-0}
+      - ZT_CFG=/app/data/config/cost_optimizer.yml
+      
+      # API Keys (from .env)
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      
+      # Logging
+      - ZT_LOG_LEVEL=info
+      - PYTHONUNBUFFERED=1
+    
     volumes:
-      # Mount data directory for persistence (optional)
-      - ./data:/app/data
-    stdin_open: true
-    tty: true
+      # Workspace (target code)
+      - ${WORKSPACE_PATH:-./workspace}:/workspace:rw
+      
+      # Logs (persistent)
+      - ./logs:/app/logs:rw
+      
+      # Configuration
+      - ./data/config:/app/data/config:ro
+      
+      # Cache (for performance)
+      - zt-cache:/app/data/cache
+      - zt-patches:/app/cache/patches
+    
     healthcheck:
-      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      test: ["CMD", "curl", "-f", "http://localhost:8088/live"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 5s
+      start_period: 40s
+    
+    restart: unless-stopped
+    
+    networks:
+      - zt-network
+    
+    labels:
+      - "com.zero-tolerance.service=api"
+      - "com.zero-tolerance.version=2.0.0"
+
+  # ============================================================================
+  # Queue Worker - Background AI processing
+  # ============================================================================
+  zt-queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zero-tolerance:2.0.0
+    container_name: zt-queue
+    command: ["python", "enforcement/ai_queue.py"]
+    
+    environment:
+      # ZT Configuration
+      - ZT_HOME=/app
+      - ZT_TARGET=/workspace
+      - ZT_MIN_SCORE=90
+      - ZT_MODE=safe
+      - ZT_DRY_RUN=${ZT_DRY_RUN:-0}
+      - ZT_CFG=/app/data/config/cost_optimizer.yml
+      - ZT_BATCH_SIZE=100
+      - ZT_MAX_WORKERS=4
+      
+      # API Keys
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      
+      # Logging
+      - ZT_LOG_LEVEL=info
+      - PYTHONUNBUFFERED=1
+    
+    volumes:
+      # Workspace
+      - ${WORKSPACE_PATH:-./workspace}:/workspace:rw
+      
+      # Logs
+      - ./logs:/app/logs:rw
+      
+      # Configuration
+      - ./data/config:/app/data/config:ro
+      
+      # Cache
+      - zt-cache:/app/data/cache
+      - zt-patches:/app/cache/patches
+    
+    restart: "no"  # Run once per invocation
+    
+    networks:
+      - zt-network
+    
+    labels:
+      - "com.zero-tolerance.service=queue"
+      - "com.zero-tolerance.version=2.0.0"
+    
+    # Depends on API being healthy
+    depends_on:
+      zt-api:
+        condition: service_healthy
+
+  # ============================================================================
+  # MCP Server (Optional - for Windsurf integration)
+  # ============================================================================
+  zt-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: zero-tolerance:2.0.0
+    container_name: zt-mcp
+    command: ["python", "contract-enforcer-mcp/server.py"]
+    
+    environment:
+      - ZT_HOME=/app
+      - ZT_TARGET=/workspace
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+    
+    volumes:
+      - ${WORKSPACE_PATH:-./workspace}:/workspace:rw
+      - ./logs:/app/logs:rw
+      - ./data:/app/data:ro
+    
+    restart: unless-stopped
+    
+    stdin_open: true
+    tty: true
+    
+    networks:
+      - zt-network
+    
+    labels:
+      - "com.zero-tolerance.service=mcp"
+      - "com.zero-tolerance.version=2.0.0"
+    
+    profiles:
+      - mcp  # Only start with: docker-compose --profile mcp up
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  zt-network:
+    driver: bridge
+    name: zero-tolerance-network
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  # Persistent cache for AI indexes
+  zt-cache:
+    name: zt-cache
+    driver: local
+  
+  # Persistent patch storage
+  zt-patches:
+    name: zt-patches
+    driver: local

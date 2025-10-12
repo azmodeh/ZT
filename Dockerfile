@@ -1,40 +1,64 @@
-# Zero Tolerance MCP Server Dockerfile
-FROM python:3.13-slim-bookworm
+# Zero Tolerance System - Production Docker Image
+FROM python:3.11-slim
 
-# Set working directory
+# Metadata
+LABEL maintainer="Zero Tolerance Team"
+LABEL version="2.0.0"
+LABEL description="Zero Tolerance Code Quality System"
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    ZT_ENV=production \
+    ZT_HOME=/app \
+    ZT_API_HOST=0.0.0.0 \
+    ZT_API_PORT=8088 \
+    ZT_MIN_SCORE=90 \
+    ZT_MODE=safe \
+    ZT_DRY_RUN=0
+
+# Create app directory
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
     git \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
-COPY pyproject.toml .
-COPY main.py .
-COPY contract-enforcer-mcp/ ./contract-enforcer-mcp/
-COPY enforcement/ ./enforcement/
-COPY app/ ./app/
-COPY data/ ./data/
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1 \
-    ZT_DOCKER_MODE=1 \
-    PYTHONPATH=/app
+# Copy application code
+COPY . .
 
-# Create a non-root user
-RUN useradd -m -u 1000 ztuser && \
-    chown -R ztuser:ztuser /app
+# Create necessary directories with proper structure
+RUN mkdir -p \
+    logs \
+    data/cache \
+    data/cache/ai_index \
+    data/cache/patches \
+    data/config \
+    cache/patches \
+    .github/workflows
 
-USER ztuser
+# Health check using API endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${ZT_API_PORT}/live || exit 1
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD python -c "import sys; sys.exit(0)"
+# Expose API port
+EXPOSE 8088
 
-# Run the MCP server with proper signal handling
-ENTRYPOINT ["python", "-u", "main.py"]
+# Default command - API Server
+CMD ["python", "api_server/start_server.py"]
+
+# Alternative commands (use with docker run --entrypoint):
+# Validator: ["python", "enforcement/validator_engine.py", "/workspace"]
+# Queue: ["python", "enforcement/ai_queue.py"]
+# MCP: ["python", "contract-enforcer-mcp/server.py"]

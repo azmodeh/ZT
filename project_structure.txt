@@ -1,0 +1,122 @@
+Folder PATH listing
+Volume serial number is 0C0A-0CC0
+D:.
+|   .dockerignore
+|   .env
+|   .env.example
+|   docker-compose.yml
+|   Dockerfile
+|   health_check.py
+|   LICENSE
+|   main.py
+|   package-lock.json
+|   project_structure.txt
+|   pyproject.toml
+|   README.md
+|   requirements.txt
+|   restart_mcp.py
+|   upgrade_phase1_report.json
+|   upgrade_phase2_report.json
+|   
++---api_server
+|   |   requirements.txt
+|   |   server.py
+|   |   start_server.py
+|   |   
+|   \---__pycache__
+|           server.cpython-313.pyc
+|           
++---contract-enforcer-mcp
+|   |   requirements.txt
+|   |   security_log.py
+|   |   server.py
+|   |   server_secure.py
+|   |   
+|   \---__pycache__
+|           server.cpython-313.pyc
+|           
++---data
+|   +---cache
+|   |   +---ai_index
+|   |   |       index.json
+|   |   |       
+|   |   +---diff_reports
+|   |   |       .gitkeep
+|   |   |       test.py_20251013_011303.json
+|   |   |       
+|   |   \---patches
+|   |           .gitkeep
+|   |           
+|   +---config
+|   |       agents.yml
+|   |       ai_agent_config.yml
+|   |       ai_models.json
+|   |       logging.yml
+|   |       settings.yml
+|   |       
+|   +---prompts
+|   |       zt_agent_system_prompt.md
+|   |       
+|   \---templates
+|           self_assessment.md
+|           
++---enforcement
+|   |   agent_manager.py
+|   |   ai_indexer.py
+|   |   ai_queue.py
+|   |   auto_learning.py
+|   |   contract_rules.yml
+|   |   diff_analyzer.py
+|   |   report_generator.py
+|   |   rewriter.py
+|   |   tasks.yml
+|   |   utils.py
+|   |   validator_engine.py
+|   |   zt_agent_helper.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           agent_manager.cpython-313.pyc
+|           auto_learning.cpython-313.pyc
+|           diff_analyzer.cpython-313.pyc
+|           utils.cpython-313.pyc
+|           validator_engine.cpython-313.pyc
+|           __init__.cpython-313.pyc
+|           
++---logs
+|   |   validation_history.log
+|   |   
+|   \---ai_actions
+|           .gitkeep
+|           queue_run.log
+|           
++---project
+|   |   main.py
+|   |   
+|   \---app
+|       +---classes
+|       |       enforcement_actions.py
+|       |       report_generator.py
+|       |       validator_engine.py
+|       |       violation_detector.py
+|       |       __init__.py
+|       |       
+|       +---core
+|       |       config_loader.py
+|       |       contract_enforcer.py
+|       |       logger.py
+|       |       main_runner.py
+|       |       policy_manager.py
+|       |       
+|       +---filters
+|       |       code_filters.py
+|       |       __init__.py
+|       |       
+|       \---utils
+|               helpers.py
+|               __init__.py
+|               
+\---tests
+        test_basic.py
+        test_integration.py
+        

@@ -1,343 +1,219 @@
-# Zero Tolerance Python Contract Enforcer
+# Zero Tolerance System 🎯
 
-A sophisticated Python code quality enforcement system that automatically validates, fixes, and maintains 12/12 contract compliance scores with MCP (Model Context Protocol) integration.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Code Quality](https://img.shields.io/badge/code%20quality-90%2B%25-green.svg)](https://github.com/yourusername/zero-tolerance)
 
-## 🎯 System Overview
+**سیستم اجرای قراردادهای کیفیت کد با Zero Tolerance - هوش مصنوعی پیشرفته برای تضمین کیفیت کد Python**
 
-This is a **Zero Tolerance Python Contract Enforcer** system that enforces strict Python coding standards through automated validation, fixing, and continuous integration. The system ensures 100% compliance with 12 critical Python development rules.
+## 🌟 ویژگی‌های کلیدی
 
-### 📋 12 Contract Rules (12/12 Required)
+- 🔍 **اعتبارسنجی هوشمند**: تشخیص خودکار تخلف‌های کیفیت کد
+- 🤖 **رفع خودکار AI**: اصلاح خودکار مشکلات با Multi-Agent System  
+- 📊 **یادگیری مداوم**: بهبود عملکرد بر اساس تجربه
+- 🌐 **API Server**: یکپارچگی کامل با IDE ها
+- 🔌 **MCP Integration**: پشتیبانی از Windsurf و Claude
+- 📈 **Real-time Monitoring**: نظارت زنده بر کیفیت کد
 
-| Rule | Status | Description |
-|------|--------|-------------|
-| 1 | ✅ | `main.py` ≤4 lines maximum |
-| 2 | ✅ | No hardcoded strings/numbers/URLs |
-| 3 | ✅ | Zero `print()` statements |
-| 4 | ✅ | All configuration from YAML files |
-| 5 | ✅ | Type hints on every function |
-| 6 | ✅ | PEP8 compliance (≤79 chars/line) |
-| 7 | ✅ | Files ≤300 lines maximum |
-| 8 | ✅ | Absolute imports only |
-| 9 | ✅ | English logs / Persian UI |
-| 10 | ✅ | Modular architecture |
-| 11 | ✅ | Centralized logging |
-| 12 | ✅ | Automated validation & fixing |
-
-## 🏗️ Architecture
+## 🏗️ معماری سیستم
 
 ```
-project/
-├── main.py                    # ≤4 lines ABSOLUTE MAXIMUM
-├── app/
-│   ├── __init__.py           # Version info
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── config_loader.py  # Configuration management
-│   │   ├── logger.py         # Centralized logging
-│   │   └── main_runner.py    # Application entry point
-│   ├── classes/
-│   │   ├── __init__.py
-│   │   └── validator_engine.py # Validation engine
-│   ├── utils/
-│   │   ├── __init__.py
-│   │   └── helpers.py        # Utility functions
-│   └── filters/
-│       ├── __init__.py
-│       └── code_filters.py   # Code transformation filters
-├── enforcement/              # Core enforcement engine
-│   ├── validator.py          # AST-based validation
-│   ├── rewriter.py           # Auto-fixing system
-│   ├── ai_agent.py           # AI-powered fixes
-│   ├── ai_indexer.py         # Code indexing
-│   ├── ai_queue.py           # Task queue
-│   ├── ai_reviewer.py        # AI review system
-│   ├── report_generator.py   # Compliance reporting
-│   ├── utils.py              # Core utilities
-│   ├── contract_rules.yml    # Rule definitions
-│   └── requirements.txt      # Dependencies
-├── data/
-│   ├── config/
-│   │   ├── settings.yml      # App configuration
-│   │   └── logging.yml       # Log configuration
-│   ├── templates/
-│   ├── cache/                # Runtime cache
-│   └── sessions/             # Session data
-├── logs/                     # Validation logs
-├── hooks/                    # Git hooks
-├── contract-enforcer-mcp/    # MCP server
-│   ├── server.py            # MCP server implementation
-│   └── requirements.txt     # MCP dependencies
-├── vscode/                   # VSCode integration
-│   ├── settings.json        # MCP configuration
-│   ├── tasks.json           # Build tasks
-│   └── hooks/               # VSCode hooks
-└── README.md               # This file
+Zero Tolerance System
+├── 🧠 Core Engine
+│   ├── ValidatorEngine     # موتور اعتبارسنجی
+│   ├── AgentManager       # مدیریت AI Agents  
+│   ├── AutoLearning       # سیستم یادگیری
+│   └── DiffAnalyzer       # تحلیل‌گر تغییرات
+├── 🌐 Integration Layer
+│   ├── API Server         # REST API
+│   ├── MCP Server         # Windsurf Integration
+│   └── VSCode Extension   # IDE Integration
+└── 📊 Intelligence Layer
+    ├── Multi-Agent System # ایجنت‌های تخصصی
+    ├── Learning System    # یادگیری از تجربه
+    └── Risk Analysis      # تحلیل ریسک تغییرات
 ```
 
-## 🚀 Features
+## 🚀 نصب سریع
 
-### 1. **MCP Server Integration**
-- `validate_code` - Full contract validation
-- `fix_violations` - Auto-fixing system
-- `generate_self_assessment` - Compliance reporting
-- `check_compliance` - Overall status checking
-
-### 2. **MCP Resources**
-- `validation://latest-report` - Latest validation results
-- `validation://history` - Complete validation history
-- `validation://compliance-status` - Current compliance status
-
-### 3. **VSCode Integration**
-- 5 specialized build tasks:
-  - ZT: Validate Contract
- - ZT: Auto Rewrite
-  - ZT: Build AI Index
-  - ZT: Run AI Agent (with prompt input)
- - ZT: Run Queue
-
-### 4. **AI-Powered Enforcement**
-- AI Agent for intelligent code fixes
-- Code indexer for context-aware improvements
-- Task queue for batch processing
-- AI reviewer for quality assurance
-
-### 5. **Advanced Validation**
-- AST-based code analysis
-- Line length validation (≤79 chars)
-- Hardcoded value detection
-- Print statement detection
-- Import validation (absolute only)
-- Type hint validation
-- File size validation (≤300 lines)
-
-## 🔧 Usage
-
-### Command Line Usage
+### پیش‌نیازها
 ```bash
-# Run the main application
-python project/main.py
+# Python 3.11+ required
+python --version
 
-# Run validation directly
-python enforcement/validator.py
-
-# Run auto-fixer
-python enforcement/rewriter.py
-
-# Run AI agent with custom prompt
-python enforcement/ai_agent.py "Fix line length violations"
+# Node.js 18+ (برای VSCode Extension)
+node --version
 ```
 
-### MCP Tools Usage
+### نصب سیستم
+```bash
+# 1. کلون کردن پروژه
+git clone https://github.com/yourusername/zero-tolerance.git
+cd zero-tolerance
+
+# 2. نصب وابستگی‌ها
+pip install -r requirements.txt
+
+# 3. تنظیم environment variables
+cp .env.example .env
+# ویرایش .env و اضافه کردن API keys
+
+# 4. اجرای تست سیستم
+python enforcement/validator_engine.py project/main.py
+```
+
+## 🎯 استفاده سریع
+
+### اعتبارسنجی پروژه
 ```python
-# From any MCP-compatible client:
-await client.call_tool("validate_code", {"base_path": "./project"})
-await client.call_tool("fix_violations", {"base_path": "./project"})
-await client.call_tool("check_compliance", {"base_path": "./project"})
+from enforcement.validator_engine import ValidatorEngine
+
+# ایجاد validator
+validator = ValidatorEngine()
+
+# اعتبارسنجی فایل
+result = validator.validate_file("your_project/main.py")
+print(f"Violations: {len(result.violations)}")
 ```
 
-### VSCode Tasks
-Access through VSCode Command Palette (`Ctrl+Shift+P`):
-- `Tasks: Run Task` → Select "ZT:" tasks
-
-## 🎯 Self-Assessment Framework
-
-The system provides comprehensive self-assessment with:
-
-### Validation Report Structure
-```json
-{
-  "project": "path/to/project",
-  "files_validated": 15,
-  "total_violations": 0,
-  "compliance_score": 100.0,
-  "violations_by_file": {},
-  "summary": {
-    "errors": 0,
-    "warnings": 0,
-    "errors_by_rule": {},
-    "warnings_by_rule": {}
-  }
-}
-```
-
-### Compliance Scoring
-- **100%**: All 12 rules passed
-- **90-99%**: Minor violations allowed
-- **<90%**: Fail - requires fixing
-
-## 🤖 AI Integration
-
-### AI Agent Capabilities
-- Context-aware code fixes
-- Pattern recognition
-- Best practice recommendations
-- Automated refactoring
-
-### AI Queue System
-- Batch processing of files
-- Priority-based task management
-- Progress tracking
-- Error handling
-
-## 📊 Validation Rules
-
-### Rule 1: Main.py Size
-- Maximum 4 lines in `main.py`
-- Enforced automatically
-- Violation: Immediate failure
-
-### Rule 2: No Hardcoded Values
-- No strings, numbers, or URLs in code
-- Must use YAML configuration
-- Enforced by AST analysis
-
-### Rule 3: No Print Statements
-- Zero `print()` allowed
-- Use `logger.info()` instead
-- Auto-converted by rewriter
-
-### Rule 4: YAML Configuration
-- All config from YAML files
-- Centralized management
-- Type-safe loading
-
-### Rule 5: Type Hints
-- Every function must have type hints
-- Parameter and return types
-- Enforced by validation
-
-### Rule 6: PEP8 Compliance
-- Maximum 79 characters per line
-- Auto-wrapping by filters
-- Line length validation
-
-### Rule 7: File Size Limits
-- Maximum 300 lines per file
-- Modular architecture enforced
-- Split large files automatically
-
-### Rule 8: Absolute Imports
-- No relative imports allowed
-- `from .module` → `from package.module`
-- Auto-conversion by filters
-
-### Rule 9: Logging Standards
-- English for logs
-- Persian for UI (if applicable)
-- Centralized logging system
-
-### Rule 10: Modular Architecture
-- Proper directory structure
-- Separation of concerns
-- Clean imports
-
-### Rule 11: Centralized Logging
-- Single logging system
-- Configurable levels
-- Structured logging
-
-### Rule 12: Automated Validation
-- Continuous compliance checking
-- Pre-commit hooks
-- Real-time feedback
-
-## 🛠️ MCP Server Setup
-
-The system includes a complete MCP server for integration with AI development tools:
-
-### Server Location
-`contract-enforcer-mcp/server.py`
-
-### Required Dependencies
+### راه‌اندازی API Server
 ```bash
-pip install mcp
+# اجرای API Server
+cd api_server
+python start_server.py
+
+# تست API
+curl http://localhost:8080/api/status
 ```
 
-### Configuration
+### یکپارچگی MCP با Windsurf
 ```json
 {
-  "mcp.servers": {
-    "zero-tolerance-contract-enforcer": {
+  "mcpServers": {
+    "ZT": {
       "command": "python",
-      "args": ["contract-enforcer-mcp/server.py"],
-      "env": {"PYTHONPATH": "."}
+      "args": ["d:/path/to/ZT/contract-enforcer-mcp/server.py"],
+      "env": {
+        "PYTHONPATH": "d:/path/to/ZT"
+      }
     }
   }
 }
 ```
 
-## 📈 Validation History
+## 📋 قوانین Zero Tolerance
 
-All validation results are stored in `logs/` directory:
-- JSON reports with timestamps
-- Detailed violation tracking
-- Compliance score history
-- File-by-file analysis
+### ✅ الزامات اصلی
+- **حداکثر 4 خط در main.py** (غیر از docstring)
+- **بدون print()** - فقط structured logging
+- **Type hints اجباری** برای همه functions
+- **حداکثر 300 خط در هر فایل**
+- **حداکثر 79 کاراکتر در هر خط**
+- **بدون hardcoded values** - استفاده از config
+- **فقط absolute imports**
+- **YAML برای configuration**
 
-## 🔒 Zero Tolerance Enforcement
+### 🎯 هدف کیفیت
+- **حداقل 90% compliance score**
+- **صفر تخلف critical**
+- **کد تمیز و قابل نگهداری**
 
-This system operates under **strict zero tolerance**:
-- Any violation = automatic failure
-- No exceptions or improvements allowed
-- Complete rewrite required for violations
-- 12/12 score mandatory for acceptance
+## 🛠️ اجزای سیستم
 
-## 🚀 Quick Start
+### 🧠 هسته سیستم
+| جزء | توضیح | وضعیت |
+|-----|--------|--------|
+| ValidatorEngine | موتور اصلی اعتبارسنجی | ✅ کامل |
+| AgentManager | مدیریت AI Agents | ✅ کامل |
+| AutoLearning | یادگیری خودکار | ✅ کامل |
+| DiffAnalyzer | تحلیل تغییرات | ✅ کامل |
 
-1. **Clone the repository**
+### 🌐 لایه یکپارچگی
+| جزء | توضیح | وضعیت |
+|-----|--------|--------|
+| API Server | REST API کامل | ✅ آماده |
+| MCP Server | یکپارچگی Windsurf | ✅ آماده |
+| VSCode Extension | افزونه VSCode | ✅ آماده |
+
+## 🔧 پیکربندی
+
+### Environment Variables
 ```bash
-git clone <repository>
-cd <repository>
+# API Configuration
+OPENROUTER_API_KEY=your_api_key
+OPENROUTER_MODEL=meta-llama/llama-3.3-70b-instruct:free
+
+# ZT Settings
+ZT_ENV=production
+LOG_LEVEL=INFO
+MAX_FILE_SIZE_MB=50
 ```
 
-2. **Install dependencies**
-```bash
-pip install -r enforcement/requirements.txt
-pip install -r contract-enforcer-mcp/requirements.txt
+### Contract Rules
+فایل `enforcement/contract_rules.yml`:
+```yaml
+max_line_length:
+  enabled: true
+  limit: 79
+
+no_print:
+  enabled: true
+  
+type_hints_required:
+  enabled: true
 ```
 
-3. **Run validation**
+## 🧪 تست و کیفیت
+
 ```bash
-python project/main.py
+# اجرای تست‌های سیستم
+python -m pytest tests/ -v
+
+# بررسی کیفیت کد
+flake8 enforcement/
+black enforcement/ --check
+
+# تست عملکرد MCP
+python contract-enforcer-mcp/server.py --test
 ```
 
-4. **Check MCP integration**
-```bash
-python contract-enforcer-mcp/server.py
+## 📊 مثال خروجی
+
+```json
+{
+  "file": "project/main.py",
+  "violations": 0,
+  "critical": 0,
+  "warnings": 0,
+  "execution_time": 0.002,
+  "compliance_score": 100
+}
 ```
 
-## 📊 Compliance Dashboard
+## 🤝 مشارکت
 
-The system provides real-time compliance monitoring through:
-- MCP resources
-- VSCode integration
-- Automated reports
-- Validation history
+1. Fork کنید
+2. Feature branch بسازید (`git checkout -b feature/AmazingFeature`)
+3. تغییرات را commit کنید (`git commit -m 'Add AmazingFeature'`)
+4. Push کنید (`git push origin feature/AmazingFeature`)
+5. Pull Request بزنید
 
-## 🤝 Integration
+## 📄 مجوز
 
-### With AI Development Tools
-- MCP protocol support
-- Real-time validation
-- Automated fixing
-- Context-aware suggestions
+این پروژه تحت مجوز MIT منتشر شده است. [LICENSE](LICENSE) را برای جزئیات ببینید.
 
-### With CI/CD
-- Pre-commit hooks
-- Build validation
-- Quality gates
-- Automated reporting
+## 🙏 تشکر
 
-### With VSCode
-- Task integration
-- MCP server configuration
-- Real-time feedback
-- Automated fixes
+- [FastMCP](https://github.com/jlowin/fastmcp) - MCP implementation
+- [FastAPI](https://fastapi.tiangolo.com/) - API framework
+- [Pydantic](https://pydantic.dev/) - Data validation
 
-## 📄 License
+## 📞 پشتیبانی
 
-This system operates under the Zero Tolerance Python Contract License - all rules must be followed without exception.
+- 📧 Email: support@zerotolerance.dev
+- 💬 Discord: [ZT Community](https://discord.gg/zerotolerance)
+- 📖 Docs: [docs.zerotolerance.dev](https://docs.zerotolerance.dev)
 
 ---
 
-**Zero Tolerance Python Contract Enforcer** - Ensuring 100% compliance, 100% of the time.
+**Zero Tolerance System - کیفیت کد بدون مصالحه! 🎯**

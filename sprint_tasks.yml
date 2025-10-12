@@ -1,0 +1,292 @@
+# Zero Tolerance - Sprint 2-Day Tasks
+# اسپرینت 2 روزه برای رسیدن به 95-100% آمادگی
+
+version: "1.0"
+sprint_duration: "2 days"
+current_status: "85%"
+target_status: "95-100%"
+
+# ========================================
+# DAY 1 TASKS
+# ========================================
+
+day1:
+  morning:
+    - task_id: "T1"
+      name: "حذف فایل‌های تکراری"
+      status: "completed"
+      priority: "high"
+      files:
+        - "project/app/classes/validator_engine.py"
+      actions:
+        - "git rm -f project/app/classes/validator_engine.py"
+      
+    - task_id: "T2"
+      name: "بهبود API Server"
+      status: "in_progress"
+      priority: "critical"
+      completion: "40%"
+      files:
+        - "api_server/server.py"
+        - "api_server/start_server.py"
+      requirements:
+        - "Structured logging (UTF-8)"
+        - "Error handling در همه endpoints"
+        - "Input validation با Pydantic"
+        - "Standard JSON responses: {ok, data|error, meta}"
+        - "ZT_TARGET validation"
+        - "Backup creation (.bak)"
+      endpoints:
+        - "GET /health"
+        - "POST /api/validate"
+        - "POST /api/rewrite"
+        - "POST /api/queue/run"
+        - "GET /api/learning/insights"
+      test_commands:
+        - "curl http://localhost:8080/health"
+        - "python -m pytest tests/test_api.py"
+  
+  afternoon:
+    - task_id: "T3"
+      name: "Polish AI Indexer"
+      status: "pending"
+      priority: "high"
+      files:
+        - "enforcement/ai_indexer.py"
+      requirements:
+        - "Robust chunking با configurable limits"
+        - "Timeout و retry mechanism"
+        - "Progress logging"
+        - "Respect excludes از contract_rules.yml"
+        - "Write index به data/cache/ai_index/"
+        - "Safe on large trees (batching)"
+        - "Memory cap enforcement"
+      test_commands:
+        - "python -c 'from enforcement.ai_indexer import AIIndexer; AIIndexer().index_project(\".\")'"
+    
+    - task_id: "T4"
+      name: "Polish Report Generator"
+      status: "pending"
+      priority: "high"
+      files:
+        - "enforcement/report_generator.py"
+      requirements:
+        - "Save JSON و CSV به logs/"
+        - "Timestamp در نام فایل"
+        - "Schema: {summary:{files, rules, violations, score}, items:[]}"
+        - "Export formats: JSON, CSV, HTML, Markdown"
+        - "Summary totals و statistics"
+      test_commands:
+        - "python -c 'from enforcement.report_generator import ReportGenerator; ReportGenerator().generate_report()'"
+
+# ========================================
+# DAY 2 TASKS
+# ========================================
+
+day2:
+  morning:
+    - task_id: "T5"
+      name: "گسترش Test Coverage"
+      status: "pending"
+      priority: "critical"
+      files:
+        - "tests/test_integration.py"
+        - "tests/test_api.py"
+        - "tests/test_large_project.py"
+      test_cases:
+        - name: "Large Project Test"
+          description: ">200 files randomized"
+          expected: "Complete in <5min"
+          
+        - name: "High Risk Block"
+          description: "risk>70 blocks auto-apply"
+          expected: "Patch not applied"
+          
+        - name: "Empty Patch Detection"
+          description: "proof-of-change detects no-op"
+          expected: "Failure reported"
+          
+        - name: "Invalid Patch Handling"
+          description: "Syntax error در patch"
+          expected: "Graceful error"
+          
+        - name: "Budget Exceed"
+          description: "Stop when budget runs out"
+          expected: "Queue stops, report shows"
+          
+        - name: "Min Score Loop"
+          description: "max_passes=3 enforcement"
+          expected: "Stops after 3 attempts"
+          
+        - name: "API Endpoints"
+          description: "Test all REST endpoints"
+          endpoints: ["/health", "/validate", "/rewrite", "/queue"]
+          
+        - name: "Concurrency"
+          description: "Multiple requests simultaneously"
+          expected: "No race conditions"
+          
+        - name: "Error Recovery"
+          description: "Graceful degradation"
+          expected: "System remains stable"
+      coverage_goal: "≥80%"
+      test_commands:
+        - "python -m pytest tests/ -v --cov=enforcement --cov-report=html"
+  
+  afternoon:
+    - task_id: "T6"
+      name: "VSCode Extension Build Fix"
+      status: "pending"
+      priority: "high"
+      files:
+        - "vscode-extension/package.json"
+        - "vscode-extension/tsconfig.json"
+        - "vscode-extension/src/extension.ts"
+        - "vscode-extension/src/apiClient.ts"
+        - "vscode-extension/src/quickFixProvider.ts"
+        - "vscode-extension/src/realTimeValidator.ts"
+      issues:
+        - "Unused variable warnings"
+        - "async/await errors"
+        - "Import resolution issues"
+      requirements:
+        - "Clean TypeScript build"
+        - "Commands: ZT: Run SAFE, ZT: Run TURBO, ZT: Show Budget"
+        - "Status bar با budget display"
+        - "Output channel برای logs"
+      test_commands:
+        - "cd vscode-extension && npm install"
+        - "cd vscode-extension && npm run build"
+        - "code --install-extension vscode-extension/"
+    
+    - task_id: "T7"
+      name: "TypeScript Watcher (Optional)"
+      status: "optional"
+      priority: "low"
+      files:
+        - "tools/watch-zt.ts"
+        - "tools/package.json"
+      requirements:
+        - "chokidar watch on ZT_TARGET"
+        - "Debounce 600ms"
+        - "Auto-run: validator → rewriter → validator"
+        - "node-notifier for OS notifications"
+        - "Ignore: node_modules, .venv, logs, cache, __pycache__, *.bak"
+      dependencies:
+        - "chokidar"
+        - "node-notifier"
+        - "@types/node"
+      test_commands:
+        - "cd tools && npm install"
+        - "cd tools && ts-node watch-zt.ts"
+
+# ========================================
+# GUARDS & POLICIES
+# ========================================
+
+guards:
+  - name: "ZT_TARGET Validation"
+    check: "validate_zt_target(path) before writes"
+    critical: true
+    
+  - name: "Backup Creation"
+    check: "Create .bak before modifications"
+    critical: true
+    
+  - name: "Proof of Change"
+    check: "Success only if real changes made"
+    critical: true
+    
+  - name: "Risk Threshold"
+    check: "Block auto-apply if risk>70"
+    threshold: 70
+    critical: true
+    
+  - name: "Budget Enforcement"
+    check: "Stop if budget exceeded"
+    config: "data/config/cost_optimizer.yml"
+    critical: true
+    
+  - name: "Structured Logging"
+    check: "UTF-8 encoding, JSON format"
+    critical: false
+    
+  - name: "Bilingual Messages"
+    check: "Persian UX, English logs"
+    critical: false
+
+# ========================================
+# ACCEPTANCE CRITERIA
+# ========================================
+
+acceptance_criteria:
+  api_server:
+    - "/health returns {ok:true, version, timestamp, components}"
+    - "/validate returns complete JSON with score≥90"
+    - "/rewrite creates .bak and applies safe fixes only"
+    - "/queue logs validate→fix→validate cycle"
+    - "All endpoints have error handling"
+    - "Input validation with Pydantic"
+    
+  tests:
+    - "All test cases pass (green)"
+    - "Coverage ≥80% for critical functions"
+    - "API integration tests successful"
+    - "Large project test completes <5min"
+    
+  vscode_extension:
+    - "Build without errors"
+    - "Commands SAFE and TURBO work"
+    - "Budget status displayed"
+    - "Real-time validation (optional)"
+    
+  documentation:
+    - "API endpoints documented"
+    - "Test cases documented"
+    - "Deployment guide updated"
+
+# ========================================
+# PROGRESS TRACKING
+# ========================================
+
+progress:
+  day1:
+    T1: 100%  # حذف تکراری - DONE
+    T2: 40%   # API Server - IN PROGRESS
+    T3: 0%    # Indexer - PENDING
+    T4: 0%    # Report - PENDING
+    
+  day2:
+    T5: 0%    # Tests - PENDING
+    T6: 0%    # VSCode - PENDING
+    T7: 0%    # Watcher - OPTIONAL
+    
+  overall:
+    current: "85%"
+    day1_target: "90%"
+    day2_target: "95-100%"
+
+# ========================================
+# EXECUTION COMMANDS
+# ========================================
+
+commands:
+  setup:
+    - "pip install -r requirements.txt"
+    - "cd vscode-extension && npm install"
+    
+  test:
+    - "python tests/test_basic.py"
+    - "python tests/test_integration.py"
+    - "python test_cost_optimizer.py"
+    - "pytest tests/ -v --cov=enforcement"
+    
+  run:
+    - "python enforcement/validator_engine.py ."
+    - "python enforcement/ai_queue.py"
+    - "cd api_server && python start_server.py"
+    
+  validate:
+    - "flake8 enforcement/"
+    - "black enforcement/ --check"
+    - "mypy enforcement/"
