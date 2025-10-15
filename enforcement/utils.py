@@ -4,17 +4,21 @@ import logging
 import logging.config
 import os
 import sys
+import shutil
 from dataclasses import dataclass
 import json
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any, Dict, Iterator, Sequence
+from typing import Any, Dict, Iterator, Sequence, Optional, Union
 
 import yaml
 
 LOG_CONFIG_PATH = Path("data/config/logging.yml")
 RULES_PATH = Path("enforcement/contract_rules.yml")
 AI_MODEL_CONFIG_PATH = Path("data/config/ai_models.json")
+
+# Logger for this module
+logger = logging.getLogger(__name__)
 
 
 def configure_logging() -> None:
@@ -152,3 +156,119 @@ def load_ai_model_config() -> Dict[str, Any]:
         return {}
     with AI_MODEL_CONFIG_PATH.open("r", encoding="utf-8") as stream:
         return json.load(stream)
+
+
+def is_dry_run() -> bool:
+    """
+    Check if we're in dry-run mode
+    
+    Returns:
+        True if ZT_DRY_RUN is set to 1, true, or yes
+    """
+    return os.getenv("ZT_DRY_RUN", "0").lower() in ("1", "true", "yes")
+
+
+def validate_path_within_target(path: Union[str, Path], target: Optional[str] = None) -> Path:
+    """
+    Validate that a path is within the target directory
+    
+    Args:
+        path: Path to validate
+        target: Optional target root (defaults to ZT_TARGET from environment)
+    
+    Returns:
+        Validated Path object
+    
+    Raises:
+        ValueError: If path is outside ZT_TARGET
+    """
+    # Get target from parameter or environment
+    target_str = target or os.getenv("ZT_TARGET", os.getcwd())
+    target_root = Path(target_str).resolve()
+    
+    # Normalize path
+    if isinstance(path, str):
+        path_obj = Path(path)
+    else:
+        path_obj = path
+    
+    # Resolve to absolute path
+    requested_path = path_obj.resolve()
+    
+    # Check if requested path is within target
+    if not str(requested_path).startswith(str(target_root)):
+        raise ValueError(
+            f"Path security violation: {requested_path} is outside target directory {target_root}"
+        )
+    
+    return requested_path
+
+
+def safe_write_file(path: Union[str, Path], content: str, backup: bool = True) -> bool:
+    """
+    Safely write content to a file with validation and backup
+    
+    Args:
+        path: Path to write to
+        content: Content to write
+        backup: Whether to create a backup of the original file
+    
+    Returns:
+        True if file was written, False if in dry-run mode
+    
+    Raises:
+        ValueError: If path is outside ZT_TARGET
+        IOError: If file cannot be written
+    """
+    # Check if we're in dry-run mode
+    if is_dry_run():
+        logger.info(f"DRY-RUN: Would write to {path}, but skipping in dry-run mode")
+        return False
+    
+    # Validate path is within target
+    path_obj = validate_path_within_target(path)
+    
+    try:
+        # Create parent directories if needed
+        path_obj.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Create backup if file exists and backup is requested
+        if backup and path_obj.exists():
+            backup_path = path_obj.with_suffix(f"{path_obj.suffix}.bak")
+            shutil.copy2(path_obj, backup_path)
+            logger.debug(f"Created backup at {backup_path}")
+        
+        # Write content
+        path_obj.write_text(content, encoding="utf-8")
+        logger.info(f"Successfully wrote to {path_obj}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to write to {path_obj}: {e}")
+        raise IOError(f"Failed to write to {path}: {e}") from e
+
+
+def json_serialize(obj: Any) -> str:
+    """
+    Serialize object to JSON with proper formatting
+    
+    Args:
+        obj: Object to serialize
+    
+    Returns:
+        JSON string
+    """
+    return json.dumps(obj, indent=2, ensure_ascii=False)
+
+
+def json_deserialize(json_str: str) -> Any:
+    """
+    Deserialize JSON string to object
+    
+    Args:
+        json_str: JSON string
+    
+    Returns:
+        Deserialized object
+    """
+    return json.loads(json_str)

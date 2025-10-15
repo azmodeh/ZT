@@ -225,26 +225,62 @@ class CostOptimizer:
             'sensitive_data': sensitive_data
         }
         
-        # Apply routing rules in order (first match wins)
+        # RULE 1: Sensitive data ALWAYS goes to local model regardless of risk
+        if sensitive_data:
+            local_model = models.get('local')
+            if local_model:
+                logger.info(f"Using local model for sensitive data: {local_model}")
+                return local_model
+            # Fallback if no local model defined
+            logger.warning("No local model defined for sensitive data, using ollama/llama3.2")
+            return "ollama/llama3.2"
+        
+        # RULE 2: Risk-based routing
+        # risk≤10→free, 10<risk≤20→fast, 20<risk≤50→medium, 50<risk≤80→deep, risk>80→local
+        if risk_score <= 10:
+            model_tier = 'free'
+        elif 10 < risk_score <= 20:
+            model_tier = 'fast'
+        elif 20 < risk_score <= 50:
+            model_tier = 'medium'
+        elif 50 < risk_score <= 80:
+            model_tier = 'deep'
+        else:  # risk > 80
+            model_tier = 'local'
+        
+        # Try to get the model for the selected tier
+        model = models.get(model_tier)
+        if model:
+            logger.info(f"Selected model: {model} (tier: {model_tier}, risk: {risk_score})")
+            return model
+        
+        # Try alternative models for the tier
+        for alt_suffix in ['_alt', '_groq', '_nvidia']:
+            alt_model = models.get(f"{model_tier}{alt_suffix}")
+            if alt_model:
+                logger.info(f"Selected alt model: {alt_model} (tier: {model_tier}{alt_suffix})")
+                return alt_model
+        
+        # RULE 3: Apply custom routing rules if no match yet
         for rule in routing.get('rules', []):
             when_condition = rule.get('when', '').strip()
             if not when_condition:
                 continue
             
             if _eval_condition(when_condition, ctx):
-                model_tier = rule.get('use', 'fast')
+                rule_model_tier = rule.get('use', 'fast')
                 
                 # Try primary model
-                model = models.get(model_tier)
-                if model:
-                    logger.debug(f"Selected model: {model} (tier: {model_tier}, rule: {when_condition})")
-                    return model
+                rule_model = models.get(rule_model_tier)
+                if rule_model:
+                    logger.debug(f"Selected model from custom rule: {rule_model} (tier: {rule_model_tier}, rule: {when_condition})")
+                    return rule_model
                 
                 # Try alternative models
                 for alt_suffix in ['_alt', '_groq', '_nvidia']:
-                    alt_model = models.get(f"{model_tier}{alt_suffix}")
+                    alt_model = models.get(f"{rule_model_tier}{alt_suffix}")
                     if alt_model:
-                        logger.debug(f"Selected alt model: {alt_model} (tier: {model_tier}{alt_suffix})")
+                        logger.debug(f"Selected alt model from custom rule: {alt_model} (tier: {rule_model_tier}{alt_suffix})")
                         return alt_model
         
         # Default fallback priority: fast → free → local

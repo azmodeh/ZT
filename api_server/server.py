@@ -637,6 +637,53 @@ async def learn(request: Request):
             }
         )
 
+@app.get("/budget")
+async def budget(request: Request):
+    """
+    Get current budget status
+    
+    Returns daily and run budget information
+    """
+    correlation_id = request.state.correlation_id
+    logger.info(f"[{correlation_id}] Budget status request")
+    
+    try:
+        # Get optimizer
+        optimizer = get_optimizer()
+        
+        # Get budget status
+        status = optimizer.get_budget_status()
+        
+        logger.info(f"[{correlation_id}] Budget status: daily={status['daily_spent']}, run={status['run_spent']}")
+        
+        return {
+            "ok": True,
+            "daily_spent": status["daily_spent"],
+            "daily_limit": status["daily_limit"],
+            "daily_remaining": status["daily_remaining"],
+            "run_spent": status["run_spent"],
+            "run_limit": status["run_limit"],
+            "run_remaining": status["run_remaining"],
+            "meta": {
+                "correlation_id": correlation_id,
+                "can_proceed": status["can_proceed"]
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"[{correlation_id}] Budget status error: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "ok": False,
+                "error": {
+                    "code": "BUDGET_ERROR",
+                    "msg": "خطا در دریافت وضعیت بودجه",
+                    "msg_en": str(e)
+                }
+            }
+        )
+
 # ============================================================================
 # SMOKE TESTS (when run directly)
 # ============================================================================
